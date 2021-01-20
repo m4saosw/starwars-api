@@ -1,7 +1,7 @@
-package br.com.massao.api.starwars.resource;
+package br.com.massao.api.starwars.v1.resource;
 
 import br.com.massao.api.starwars.dto.PersonDto;
-import br.com.massao.api.starwars.service.PeopleService;
+import br.com.massao.api.starwars.v1.service.PeopleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

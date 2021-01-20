@@ -1,4 +1,4 @@
-package br.com.massao.api.starwars.repository;
+package br.com.massao.api.starwars.v1.repository;
 
 import br.com.massao.api.starwars.model.PersonModel;
 import org.springframework.data.jpa.repository.JpaRepository;

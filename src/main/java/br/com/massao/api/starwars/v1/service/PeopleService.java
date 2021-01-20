@@ -1,7 +1,7 @@
-package br.com.massao.api.starwars.service;
+package br.com.massao.api.starwars.v1.service;
 
 import br.com.massao.api.starwars.model.PersonModel;
-import br.com.massao.api.starwars.repository.PeopleRepository;
+import br.com.massao.api.starwars.v1.repository.PeopleRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
