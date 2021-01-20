@@ -46,4 +46,19 @@ public class PersonModel {
     @NotEmpty(message = "Homeworld is empty")
     private String homeworld;
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PersonModel that = (PersonModel) o;
+
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }
