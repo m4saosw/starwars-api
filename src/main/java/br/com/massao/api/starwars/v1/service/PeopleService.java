@@ -1,5 +1,6 @@
 package br.com.massao.api.starwars.v1.service;
 
+import br.com.massao.api.starwars.exception.NotFoundException;
 import br.com.massao.api.starwars.model.PersonModel;
 import br.com.massao.api.starwars.v1.repository.PeopleRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -22,8 +24,19 @@ public class PeopleService {
         log.debug("list");
 
         return repository.findAll();
-//        List<PersonModel> list = new ArrayList<>();
-//        list.add(PersonModel.builder().id(1L).birth_year("XFDFD").gender("man").height(123).homeworld("terra").mass(50).name("person").build());
-//        return list;
+    }
+
+    /**
+     * @param id
+     * @return
+     */
+    public Optional<PersonModel> findById(Long id) throws NotFoundException {
+        log.debug("findById id={}", id);
+
+        Optional<PersonModel> planet = repository.findById(id);
+
+        if (!planet.isPresent()) throw new NotFoundException();
+
+        return planet;
     }
 }
