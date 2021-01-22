@@ -30,6 +30,7 @@ public class PeopleService {
      * @param id
      * @return
      */
+    // mudar para ResourceNotFoundException ?
     public Optional<PersonModel> findById(Long id) throws NotFoundException {
         log.debug("findById id={}", id);
 
