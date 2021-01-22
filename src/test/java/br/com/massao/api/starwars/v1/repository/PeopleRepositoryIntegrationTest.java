@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -36,15 +36,15 @@ public class PeopleRepositoryIntegrationTest {
     }
 
     @Test
-    public void whenListThenReturnPeople() {
+    public void givenPeopleWhenListThenReturnPeople() {
         // given
         peopleRepository.deleteAll();
 
         PersonModel person1 = PersonModel.builder().birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
         PersonModel person2 = PersonModel.builder().birth_year("11111").gender("female").height(123).homeworld("terra").mass(100).name("PERSON2").build();
 
-        PersonModel person1Persisted = (PersonModel) entityManager.persist(person1);
-        PersonModel person2Persisted = (PersonModel) entityManager.persist(person2);
+        PersonModel person1Persisted = entityManager.persist(person1);
+        PersonModel person2Persisted = entityManager.persist(person2);
         entityManager.flush();
 
         // when
@@ -58,6 +58,27 @@ public class PeopleRepositoryIntegrationTest {
 
     }
 
+
+    @Test
+    public void givenPersonWhenFindByIdThenReturnPerson() {
+        // given
+        peopleRepository.deleteAll();
+
+        PersonModel person1 = PersonModel.builder().birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
+        PersonModel person2 = PersonModel.builder().birth_year("11111").gender("female").height(123).homeworld("terra").mass(100).name("PERSON2").build();
+
+        Long idGenerated1 = (Long) entityManager.persistAndGetId(person1);
+        entityManager.persistAndGetId(person2);
+
+        entityManager.flush();
+
+        // when
+        Optional<PersonModel> personFound = peopleRepository.findById(idGenerated1);
+
+        // then
+        assertThat(personFound.isPresent()).isTrue();
+        assertThat(personFound.get().getId()).isEqualTo(idGenerated1);
+    }
 
     // TODO - incluir/ excluir/ alterar
 }
