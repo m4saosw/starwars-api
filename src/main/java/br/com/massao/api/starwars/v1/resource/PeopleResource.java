@@ -1,5 +1,6 @@
 package br.com.massao.api.starwars.v1.resource;
 
+import br.com.massao.api.starwars.converter.PersonModelConverter;
 import br.com.massao.api.starwars.dto.PersonDto;
 import br.com.massao.api.starwars.exception.NotFoundException;
 import br.com.massao.api.starwars.model.PersonModel;
@@ -8,11 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -55,4 +55,18 @@ public class PeopleResource {
         return new ResponseEntity<>(new PersonDto(person.get()), HttpStatus.OK);
     }
 
+
+    @PostMapping
+    public ResponseEntity<?> create(@Valid @RequestBody PersonDto person) {
+        log.info("create person={}", person);
+
+        PersonModel personModel = new PersonModelConverter().modelFrom(person);
+
+        PersonModel entity = peopleService.save(personModel);
+
+        URI location = URI.create(String.format("starwars-api/v1/people/%s", entity.getId()));
+
+        // nota: ResponseEntity retornando link do novo recurso no cabecalho da requisicao
+        return ResponseEntity.created(location).build();
+    }
 }

@@ -40,4 +40,13 @@ public class PeopleService {
 
         return planet;
     }
+
+
+    /**
+     * @param person
+     * @return
+     */
+    public PersonModel save(PersonModel person) {
+        return repository.save(person);
+    }
 }
