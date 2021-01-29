@@ -20,6 +20,7 @@ import java.util.Optional;
 @Slf4j
 @RestController
 @RequestMapping("v1/people")
+// TODO - usar interfaces
 public class PeopleResource {
     @Autowired
     private PeopleService peopleService;
