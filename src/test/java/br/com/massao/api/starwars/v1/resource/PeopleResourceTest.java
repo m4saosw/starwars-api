@@ -1,8 +1,10 @@
 package br.com.massao.api.starwars.v1.resource;
 
+import br.com.massao.api.starwars.dto.PersonDto;
 import br.com.massao.api.starwars.exception.NotFoundException;
 import br.com.massao.api.starwars.model.PersonModel;
 import br.com.massao.api.starwars.v1.service.PeopleService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,15 +16,19 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -35,6 +41,13 @@ public class PeopleResourceTest {
     @MockBean
     private PeopleService peopleService;
 
+    public static String asJsonString(final Object obj) {
+        try {
+            return new ObjectMapper().writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @BeforeEach
     public void setUp() {
@@ -80,7 +93,6 @@ public class PeopleResourceTest {
                 .andExpect(jsonPath("$[1].name", is(person2.getName())));
     }
 
-
     /**
      * FIND BY ID TEST CASES
      */
@@ -99,7 +111,6 @@ public class PeopleResourceTest {
                 .andExpect(jsonPath("$").doesNotExist());
     }
 
-
     @Test
     public void givenPersonWhenFindByIdPersonThenReturnPersonWithStatus200() throws Exception {
         // given
@@ -115,4 +126,51 @@ public class PeopleResourceTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(person1.getId()));
     }
+
+
+    /**
+     * CREATE TEST CASES
+     */
+
+    @Test
+    public void givenPersonWhenCreatePersonThenReturnLocationWithStatus201() throws Exception {
+        // given
+        PersonModel person1 = PersonModel.builder().id(1L).birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
+
+        // when
+        given(peopleService.save(any(PersonModel.class))).willReturn(person1);
+
+        // then
+        String location = String.format("starwars-api/v1/people/%s", person1.getId());
+        String jsonObject = asJsonString(new PersonDto(person1));
+
+        mvc.perform(post("/v1/people")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonObject))
+                .andExpect(status().isCreated())
+                .andExpect(content().string(""))
+                .andExpect(header().string("location", location));
+    }
+
+    @Test
+    public void givenInvalidPersonWhenCreatePersonThenReturnStatus400() throws Exception {
+        // given
+        PersonModel person1 = PersonModel.builder().build();
+
+        // when
+        given(peopleService.save(any(PersonModel.class))).willReturn(person1);
+
+        // then
+        String jsonObject = asJsonString(new PersonDto(person1));
+
+        mvc.perform(post("/v1/people")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonObject))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(""));
+    }
+
+
+    // se for excecao e der erro, validar o content type do erro
+    // https://blog.runscope.com/posts/6-common-api-errors
 }

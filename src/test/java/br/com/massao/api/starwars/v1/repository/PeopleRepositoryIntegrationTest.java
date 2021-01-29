@@ -1,13 +1,16 @@
 package br.com.massao.api.starwars.v1.repository;
 
 
+import br.com.massao.api.starwars.exception.NotFoundException;
 import br.com.massao.api.starwars.model.PersonModel;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,8 +71,6 @@ public class PeopleRepositoryIntegrationTest {
         PersonModel person2 = PersonModel.builder().birth_year("11111").gender("female").height(123).homeworld("terra").mass(100).name("PERSON2").build();
 
         Long idGenerated1 = (Long) entityManager.persistAndGetId(person1);
-        entityManager.persistAndGetId(person2);
-
         entityManager.flush();
 
         // when
@@ -78,6 +79,29 @@ public class PeopleRepositoryIntegrationTest {
         // then
         assertThat(personFound.isPresent()).isTrue();
         assertThat(personFound.get().getId()).isEqualTo(idGenerated1);
+    }
+
+    @Test
+    public void givenPersonWhenCreateThenSave() {
+        // given
+        PersonModel person1 = PersonModel.builder().birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
+
+        // when
+        PersonModel personFound = peopleRepository.saveAndFlush(person1);
+
+        // then
+        assertThat(personFound).isNotNull();
+        assertThat(personFound).isEqualTo(person1);
+    }
+
+    @Test
+    public void givenInvalidPersonWhenCreateThenThrowsRuntimeException() {
+        // given
+        PersonModel person1 = PersonModel.builder().build();
+
+        // when / then
+        Assertions.assertThatExceptionOfType(ConstraintViolationException.class).isThrownBy(
+                () -> peopleRepository.saveAndFlush(person1));
     }
 
     // TODO - incluir/ excluir/ alterar

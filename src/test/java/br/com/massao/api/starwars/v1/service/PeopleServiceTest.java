@@ -9,11 +9,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validator;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -113,6 +117,42 @@ public class PeopleServiceTest {
 
 
     /**
+     * CREATE TEST CASES
+     */
+
+    @Test
+    public void givenPersonWhenCreateThenReturnPerson() {
+        // given
+        PersonModel person1 = PersonModel.builder().id(1L).birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
+
+        // prepares mock
+        Mockito.when(peopleRepository.save(person1)).thenReturn(person1);
+
+        // when
+        PersonModel personResult = peopleService.save(person1);
+
+        // then
+        assertThat(personResult).isNotNull();
+        assertThat(personResult).isEqualTo(person1);
+    }
+
+
+    @Test
+    // TODO - melhorar manipulacao de erro - quando invalido, excecao ou null lancar excecao
+    public void givenInvalidPersonWhenCreateThenThrowsRuntimeException() {
+        // given
+        PersonModel person1 = PersonModel.builder().build();
+
+        // prepares mock
+        Mockito.when(peopleRepository.save(person1)).thenReturn(null);
+
+        // when / then
+        Assertions.assertThatExceptionOfType(ConstraintViolationException.class).isThrownBy(
+                () -> peopleService.save(person1));
+    }
+
+
+    /**
      * TestConfiguration guarantee this bean is only for test scope
      */
     @TestConfiguration
@@ -122,5 +162,13 @@ public class PeopleServiceTest {
             return new PeopleService();
 
         }
+
+
+        @Bean
+        public Validator validator() {
+            return new LocalValidatorFactoryBean();
+        }
     }
+
+    //  https://www.sisense.com/blog/rest-api-testing-strategy-what-exactly-should-you-test/
 }

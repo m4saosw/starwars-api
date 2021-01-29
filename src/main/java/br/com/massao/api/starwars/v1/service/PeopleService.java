@@ -6,16 +6,27 @@ import br.com.massao.api.starwars.v1.repository.PeopleRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
+import javax.validation.Validator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 @Service
+@Validated
+// TODO - usar interfaces
 public class PeopleService {
 
     @Autowired
     private PeopleRepository repository;
+
+    @Autowired
+    private Validator validator;
 
     /**
      * @return
@@ -46,7 +57,11 @@ public class PeopleService {
      * @param person
      * @return
      */
-    public PersonModel save(PersonModel person) {
+    public PersonModel save(@Valid PersonModel person) {
+        // TODO - refactor - handler exception
+        Set<ConstraintViolation<PersonModel>> violations = validator.validate(person);
+        if (! violations.isEmpty()) throw new ConstraintViolationException(violations);
+
         return repository.save(person);
     }
 }
