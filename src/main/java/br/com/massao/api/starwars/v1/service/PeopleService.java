@@ -5,6 +5,7 @@ import br.com.massao.api.starwars.model.PersonModel;
 import br.com.massao.api.starwars.v1.repository.PeopleRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -58,10 +59,27 @@ public class PeopleService {
      * @return
      */
     public PersonModel save(@Valid PersonModel person) {
+        log.debug("save person={}", person);
+
         // TODO - refactor - handler exception
         Set<ConstraintViolation<PersonModel>> violations = validator.validate(person);
         if (! violations.isEmpty()) throw new ConstraintViolationException(violations);
 
         return repository.save(person);
+    }
+
+    /**
+     *
+     * @param id
+     * @throws NotFoundException
+     */
+    public void deleteById(Long id) throws NotFoundException {
+        log.debug("deleteById id={}", id);
+
+        try {
+            repository.deleteById(id);
+        } catch(EmptyResultDataAccessException e) {
+            throw new NotFoundException();
+        }
     }
 }

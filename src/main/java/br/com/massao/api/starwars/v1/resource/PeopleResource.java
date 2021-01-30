@@ -67,7 +67,25 @@ public class PeopleResource {
 
         URI location = URI.create(String.format("starwars-api/v1/people/%s", entity.getId()));
 
+
+//        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path(
+//                "/{id}").buildAndExpand(course.getId()).toUri();
+
         // nota: ResponseEntity retornando link do novo recurso no cabecalho da requisicao
         return ResponseEntity.created(location).build();
+    }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteById(@PathVariable("id") Long id) {
+        log.info("deleteById id={}", id);
+
+        try {
+            peopleService.deleteById(id);
+            return ResponseEntity.noContent().build();
+
+        } catch (NotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

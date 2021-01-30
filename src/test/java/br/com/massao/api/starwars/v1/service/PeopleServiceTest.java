@@ -9,10 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
@@ -23,8 +23,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.verify;
 
 
 @ExtendWith(SpringExtension.class)
@@ -139,7 +139,7 @@ public class PeopleServiceTest {
 
     @Test
     // TODO - melhorar manipulacao de erro - quando invalido, excecao ou null lancar excecao
-    public void givenInvalidPersonWhenCreateThenThrowsRuntimeException() {
+    public void givenInvalidPersonWhenCreateThenThrowsConstraintViolationException() {
         // given
         PersonModel person1 = PersonModel.builder().build();
 
@@ -149,6 +149,39 @@ public class PeopleServiceTest {
         // when / then
         Assertions.assertThatExceptionOfType(ConstraintViolationException.class).isThrownBy(
                 () -> peopleService.save(person1));
+    }
+
+
+    /**
+     * DELETE BY ID TEST CASES
+     */
+
+    @Test
+    public void givenPersonWhenDeleteByIdThenDelete() throws NotFoundException {
+        // given
+        PersonModel person1 = PersonModel.builder().id(1L).birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
+
+        // prepares mock
+        Mockito.doNothing().when(peopleRepository).deleteById(person1.getId());
+
+        // when
+        peopleService.deleteById(person1.getId());
+
+        // then
+        verify(peopleRepository).deleteById(person1.getId());
+    }
+
+
+
+    @Test()
+    public void givenNotFoundWhenDeleteByIdThenThrowsNotFoundException() {
+        // given
+        // prepares mock
+        Mockito.doThrow(EmptyResultDataAccessException.class).when(peopleRepository).deleteById(anyLong());
+
+        // when/then
+        Assertions.assertThatExceptionOfType(NotFoundException.class).isThrownBy(
+                () -> peopleService.deleteById(999L));
     }
 
 

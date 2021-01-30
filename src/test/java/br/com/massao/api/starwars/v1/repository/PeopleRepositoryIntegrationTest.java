@@ -9,12 +9,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyLong;
 
 
 /**
@@ -104,5 +106,37 @@ public class PeopleRepositoryIntegrationTest {
                 () -> peopleRepository.saveAndFlush(person1));
     }
 
-    // TODO - incluir/ excluir/ alterar
+
+    @Test
+    public void givenPersonWhenDeleteByIdThenDelete() {
+        // given
+        peopleRepository.deleteAll();
+
+        PersonModel person1 = PersonModel.builder().birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
+        PersonModel person2 = PersonModel.builder().birth_year("11111").gender("female").height(123).homeworld("terra").mass(100).name("PERSON2").build();
+
+        Long idGenerated1 = (Long) entityManager.persistAndGetId(person1);
+        Long idGenerated2 = (Long) entityManager.persistAndGetId(person2);
+        entityManager.flush();
+        long totalOfRecords = peopleRepository.count();
+
+        // when
+        peopleRepository.deleteById(idGenerated1);
+
+        // then
+        assertThat(peopleRepository.findById(idGenerated1).isPresent()).isFalse();
+        assertThat(peopleRepository.count()).isEqualTo(totalOfRecords - 1);
+    }
+
+
+    @Test
+    public void givenInvalidPersonWhenDeleteByIdThenThrowsEmptyResultDataAccessException() {
+        // given
+
+        // when / then
+        Assertions.assertThatExceptionOfType(EmptyResultDataAccessException.class).isThrownBy(
+                () -> peopleRepository.deleteById(9999L));
+    }
+
+    // TODO - alterar
 }

@@ -12,6 +12,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -27,8 +28,7 @@ import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -168,6 +168,40 @@ public class PeopleResourceTest {
                 .content(jsonObject))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string(""));
+    }
+
+
+    /**
+     * DELETE BY ID TEST CASES
+     */
+
+    @Test
+    public void givenNotFoundWhenDeleteByIdPersonThenReturnStatus404() throws Exception {
+        // given
+
+        // when
+        Mockito.doThrow(NotFoundException.class).when(peopleService).deleteById(anyLong());
+
+        // then
+        mvc.perform(delete("/v1/people/{id}", 1L)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$").doesNotExist());
+    }
+
+    @Test
+    public void givenPersonWhenDeleteByIdPersonThenDeleteAndReturnStatus204() throws Exception {
+        // given
+        PersonModel person1 = PersonModel.builder().id(1L).birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
+
+        // when
+        //given(peopleService.deleteById(person1.getId())).willReturn();
+
+        // then
+        mvc.perform(delete("/v1/people/{id}", person1.getId())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andExpect(jsonPath("$").doesNotExist());
     }
 
 
