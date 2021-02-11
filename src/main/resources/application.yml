@@ -2,6 +2,10 @@ server:
   servlet:
     context-path: /starwars-api
 
+swapi:
+  url: https://swapi.dev/api
+  # url: https://swapi-deno.azurewebsites.net/api
+
 spring:
   h2:
     console:
