@@ -36,10 +36,13 @@ public class PeopleServiceTest {
     @MockBean
     private PeopleRepository peopleRepository;
 
+    @MockBean
+    private SwapiPlanetsService planetsService;
 
 
     @BeforeEach
     public void setUp() {
+        Mockito.when(planetsService.existsPlanetByName(any())).thenReturn(true);
     }
 
     /**
