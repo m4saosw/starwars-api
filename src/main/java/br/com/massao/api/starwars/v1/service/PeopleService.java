@@ -105,6 +105,6 @@ public class PeopleService {
         person.get().setMass((newPerson.getMass()));
         person.get().setHomeworld((newPerson.getHomeworld()));
 
-        return Optional.of(repository.save(person.get()));
+        return Optional.of(this.save(person.get()));
     }
 }
