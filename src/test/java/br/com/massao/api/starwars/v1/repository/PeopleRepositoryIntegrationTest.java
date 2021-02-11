@@ -139,4 +139,40 @@ public class PeopleRepositoryIntegrationTest {
     }
 
     // TODO - alterar
+
+
+    @Test
+    public void givenPersonWhenModifyByIdThenModify() {
+        // given
+        peopleRepository.deleteAll();
+
+        PersonModel person1 = PersonModel.builder().birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
+        PersonModel person2 = PersonModel.builder().birth_year("11111").gender("female").height(123).homeworld("terra").mass(100).name("PERSON2").build();
+
+        Long idGenerated1 = (Long) entityManager.persistAndGetId(person1);
+        entityManager.flush();
+
+        // when
+        PersonModel person = peopleRepository.findById(idGenerated1).get();
+        person.setName(person2.getName());
+        person.setHomeworld(person2.getHomeworld());
+        person.setMass(person2.getMass());
+        person.setHeight(person2.getHeight());
+        person.setGender(person2.getGender());
+        person.setBirth_year(person2.getBirth_year());
+
+        peopleRepository.save(person);
+
+
+        // then
+        PersonModel model = peopleRepository.findById(idGenerated1).get();
+        assertThat(model).isNotNull();
+        assertThat(model.getName()).isEqualTo(person2.getName());
+        assertThat(model.getHomeworld()).isEqualTo(person2.getHomeworld());
+        assertThat(model.getMass()).isEqualTo(person2.getMass());
+        assertThat(model.getHeight()).isEqualTo(person2.getHeight());
+        assertThat(model.getGender()).isEqualTo(person2.getGender());
+        assertThat(model.getBirth_year()).isEqualTo(person2.getBirth_year());
+    }
+
 }

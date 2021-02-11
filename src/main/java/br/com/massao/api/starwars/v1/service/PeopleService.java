@@ -46,11 +46,11 @@ public class PeopleService {
     public Optional<PersonModel> findById(Long id) throws NotFoundException {
         log.debug("findById id={}", id);
 
-        Optional<PersonModel> planet = repository.findById(id);
+        Optional<PersonModel> person = repository.findById(id);
 
-        if (!planet.isPresent()) throw new NotFoundException();
+        if (!person.isPresent()) throw new NotFoundException();
 
-        return planet;
+        return person;
     }
 
 
@@ -81,5 +81,24 @@ public class PeopleService {
         } catch(EmptyResultDataAccessException e) {
             throw new NotFoundException();
         }
+    }
+
+    /**
+     * @param id
+     * @param newPerson
+     * @return
+     */
+    public Optional<PersonModel> modify(Long id, PersonModel newPerson) throws NotFoundException {
+        Optional<PersonModel> person = findById(id);
+
+        // Updates current person
+        person.get().setName(newPerson.getName());
+        person.get().setBirth_year(newPerson.getBirth_year());
+        person.get().setGender(newPerson.getGender());
+        person.get().setHeight((newPerson.getHeight()));
+        person.get().setMass((newPerson.getMass()));
+        person.get().setHomeworld((newPerson.getHomeworld()));
+
+        return Optional.of(repository.save(person.get()));
     }
 }

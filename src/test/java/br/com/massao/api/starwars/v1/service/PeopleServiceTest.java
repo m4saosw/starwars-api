@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 
@@ -103,7 +104,6 @@ public class PeopleServiceTest {
         assertThat(peopleResult.get()).isEqualTo(person1);
     }
 
-
     @Test()
     public void givenNotFoundWhenFindByIdThenThrowsNotFoundException() {
         // given
@@ -135,7 +135,6 @@ public class PeopleServiceTest {
         assertThat(personResult).isNotNull();
         assertThat(personResult).isEqualTo(person1);
     }
-
 
     @Test
     // TODO - melhorar manipulacao de erro - quando invalido, excecao ou null lancar excecao
@@ -171,8 +170,6 @@ public class PeopleServiceTest {
         verify(peopleRepository).deleteById(person1.getId());
     }
 
-
-
     @Test()
     public void givenNotFoundWhenDeleteByIdThenThrowsNotFoundException() {
         // given
@@ -182,6 +179,42 @@ public class PeopleServiceTest {
         // when/then
         Assertions.assertThatExceptionOfType(NotFoundException.class).isThrownBy(
                 () -> peopleService.deleteById(999L));
+    }
+
+
+    /**
+     * MODIFY TEST CASES
+     */
+
+    @Test
+    public void givenPersonWhenModifyThenModify() throws NotFoundException {
+        // given
+        PersonModel person1 = PersonModel.builder().id(1L).birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
+
+        // prepares mock
+        Mockito.when(peopleRepository.findById(any())).thenReturn(Optional.of(person1));
+        Mockito.when(peopleRepository.save(any())).thenReturn(person1);
+
+        // when
+        peopleService.modify(person1.getId(), person1);
+
+        // then
+        verify(peopleRepository).findById(any());
+        verify(peopleRepository).save(any());
+    }
+
+    @Test()
+    public void givenInvalidPersonIdWhenModifyThenThrowsNotFoundException() {
+        // given
+        // prepares mock
+        Mockito.when(peopleRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        // when
+        PersonModel model = PersonModel.builder().build();
+
+        // when/then
+        Assertions.assertThatExceptionOfType(NotFoundException.class).isThrownBy(
+                () -> peopleService.modify(9999L, model));
     }
 
 

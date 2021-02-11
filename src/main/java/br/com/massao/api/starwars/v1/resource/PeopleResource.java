@@ -88,4 +88,20 @@ public class PeopleResource {
             return ResponseEntity.notFound().build();
         }
     }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> modify(@PathVariable("id") Long id, @Valid @RequestBody PersonDto person) {
+        log.info("modify id={} person={}", id, person);
+
+        try {
+            PersonModel model = new PersonModelConverter().modelFrom(person);
+            Optional<PersonModel> modified = peopleService.modify(id, model);
+
+            return ResponseEntity.ok().body(new PersonDto(modified.get()));
+
+        } catch (NotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

@@ -25,8 +25,7 @@ import java.util.Optional;
 import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -202,6 +201,52 @@ public class PeopleResourceTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())
                 .andExpect(jsonPath("$").doesNotExist());
+    }
+
+
+    /**
+     * MODIFY TEST CASES
+     */
+
+    @Test
+    public void givenNotFoundWhenModifyPersonThenReturnStatus404() throws Exception {
+        // given
+        PersonModel person1 = PersonModel.builder().id(1L).birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
+
+        // when
+        Mockito.when(peopleService.modify(anyLong(), any())).thenThrow(NotFoundException.class);
+
+        // then
+        String jsonObject = asJsonString(new PersonDto(person1));
+        mvc.perform(put("/v1/people/{id}", 1L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonObject))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$").doesNotExist());
+    }
+
+    @Test
+    public void givenPersonWhenModifyThenReturnPersonWithStatus200() throws Exception {
+        // given
+        PersonModel person1 = PersonModel.builder().id(1L).birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
+        PersonModel person2 = PersonModel.builder().birth_year("11111").gender("female").height(123).homeworld("terra").mass(100).name("PERSON2").build();
+
+        // when
+        given(peopleService.modify(anyLong(), any())).willReturn(Optional.of(person2));
+
+        // then
+        String jsonObject = asJsonString(new PersonDto(person2));
+        mvc.perform(put("/v1/people/{id}", person1.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonObject))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.name").value(person2.getName()))
+                .andExpect(jsonPath("$.height").value(person2.getHeight()))
+                .andExpect(jsonPath("$.mass").value(person2.getMass()))
+                .andExpect(jsonPath("$.birth_year").value(person2.getBirth_year()))
+                .andExpect(jsonPath("$.gender").value(person2.getGender()));
+                //.andExpect(jsonPath("$.homeworld").value(person2.getHomeworld()));
     }
 
 
