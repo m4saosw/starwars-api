@@ -29,6 +29,9 @@ public class PeopleService {
     @Autowired
     private Validator validator;
 
+    @Autowired
+    private SwapiPlanetsService planetsService;
+
     /**
      * @return
      */
@@ -64,6 +67,9 @@ public class PeopleService {
         // TODO - refactor - handler exception
         Set<ConstraintViolation<PersonModel>> violations = validator.validate(person);
         if (! violations.isEmpty()) throw new ConstraintViolationException(violations);
+
+        if (! planetsService.existsPlanetByName(person.getHomeworld())) throw new IllegalArgumentException("Homeworld is not a valid Planet in StarWars API");
+
 
         return repository.save(person);
     }
