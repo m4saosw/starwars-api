@@ -15,7 +15,7 @@ public class PersonModelConverter {
                 .mass(person.getMass())
                 .birth_year(person.getBirth_year())
                 .gender(person.getGender())
-                .homeworld(Integer.toString(person.getHomeworld()))
+                .homeworld(person.getHomeworld())
                 .build();
         return model;
     }

@@ -39,8 +39,8 @@ public class PersonDto {
     private String gender;
 
     @JsonProperty("homeworld")
-    @Min(0)
-    private int homeworld;
+    @NotEmpty(message = "homeworld is empty")
+    private String homeworld;
 
     @JsonProperty("filmsExhibitions")
     private int filmsExhibitions; // TODO - query
@@ -52,6 +52,6 @@ public class PersonDto {
         this.mass = model.getMass();
         this.birth_year = model.getBirth_year();
         this.gender = model.getGender();
-        // this.homeworld = model.getHomeworld(); // TODO - query
+        this.homeworld = model.getHomeworld(); // TODO - query
     }
 }
