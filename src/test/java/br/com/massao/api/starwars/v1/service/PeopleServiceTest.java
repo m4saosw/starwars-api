@@ -153,6 +153,21 @@ public class PeopleServiceTest {
                 () -> peopleService.save(person1));
     }
 
+    @Test
+    // TODO - melhorar manipulacao de erro - quando invalido, excecao ou null lancar excecao
+    public void givenInvalidHomeworldInPersonWhenCreateThenThrowsIllegalArgumentException() {
+        // given
+        PersonModel person1 = PersonModel.builder().id(1L).birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
+
+        // prepares mock
+        Mockito.when(planetsService.existsPlanetByName(any())).thenReturn(false);
+        Mockito.when(peopleRepository.save(person1)).thenReturn(null);
+
+        // when / then
+        Assertions.assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(
+                () -> peopleService.save(person1));
+    }
+
 
     /**
      * DELETE BY ID TEST CASES
@@ -211,8 +226,6 @@ public class PeopleServiceTest {
         // given
         // prepares mock
         Mockito.when(peopleRepository.findById(anyLong())).thenReturn(Optional.empty());
-
-        // when
         PersonModel model = PersonModel.builder().build();
 
         // when/then
@@ -220,6 +233,30 @@ public class PeopleServiceTest {
                 () -> peopleService.modify(9999L, model));
     }
 
+    @Test()
+    public void givenInvalidAttributesInPersonWhenModifyThenThrowsConstraintViolationException() {
+        // given
+        // prepares mock
+        PersonModel person1 = PersonModel.builder().id(1L).build();
+        Mockito.when(peopleRepository.findById(any())).thenReturn(Optional.of(person1));
+
+        // when/then
+        Assertions.assertThatExceptionOfType(ConstraintViolationException.class).isThrownBy(
+                () -> peopleService.modify(9999L, person1));
+    }
+
+    @Test()
+    public void givenInvalidHomeworldInPersonWhenModifyThenThrowsIllegalArgumentException() {
+        // given
+        // prepares mock
+        PersonModel person1 = PersonModel.builder().id(1L).birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
+        person1.setHomeworld("");
+        Mockito.when(peopleRepository.findById(any())).thenReturn(Optional.of(person1));
+
+        // when/then
+        Assertions.assertThatExceptionOfType(ConstraintViolationException.class).isThrownBy(
+                () -> peopleService.modify(9999L, person1));
+    }
 
     /**
      * TestConfiguration guarantee this bean is only for test scope
