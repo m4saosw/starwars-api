@@ -51,6 +51,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		return buildResponseEntity(new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, message, ex));
 	}
 
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity<Object> handleIllegalArgument(Exception ex) {
+		String message = "Invalid arguments in body";
+		log.debug("handleHttpClientError exception={}", ex.getMessage());
+
+		return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, message, ex));
+	}
+
 	/**
 	 * Request param handler
 	 */
@@ -86,6 +94,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
 		return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, message, ex));
 	}
+
 
 
 

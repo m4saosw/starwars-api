@@ -22,7 +22,7 @@ public class ApiError {
 		this();
 		this.status = status;
 		this.message = message;
-		this.debugMessage = ex.getCause().getLocalizedMessage();
+		this.debugMessage = ex.getCause() == null ? ex.getLocalizedMessage() : ex.getCause().getLocalizedMessage();
 	}
 	
 	
