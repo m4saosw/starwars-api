@@ -13,3 +13,21 @@ spring:
       path: /h2
   datasource:
     url: jdbc:h2:mem:starwarsapidb
+  output:
+  ansi:
+    enabled: DETECT
+
+
+logging:
+  level:
+    root: WARN
+    org:
+      springframework:
+        web: WARN
+        cache : TRACE
+      hibernate: WARN
+    br:
+      com:
+        massao: DEBUG
+
+
