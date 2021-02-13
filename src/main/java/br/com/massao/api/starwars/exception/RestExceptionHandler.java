@@ -116,4 +116,19 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
 		return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, message, ex));
 	}
+
+
+	/**
+	 * Default handler
+	 * @param ex
+	 * @param request
+	 * @return
+	 */
+	@ExceptionHandler({ Exception.class })
+	public ResponseEntity<Object> handleAll(Exception ex, WebRequest request) {
+		String message = "Internal exception at " + request.toString();
+		log.debug("handleAll exception={}", ex.getMessage());
+
+		return buildResponseEntity(new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, message, ex));
+	}
 }
