@@ -2,11 +2,13 @@
 package br.com.massao.api.starwars.v1.swapi;
 
 import com.fasterxml.jackson.annotation.*;
+import lombok.ToString;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
     "count",

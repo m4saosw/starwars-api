@@ -1,9 +1,6 @@
 package br.com.massao.api.starwars.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,6 +13,7 @@ import javax.validation.constraints.NotEmpty;
 @NoArgsConstructor // used by JPA
 @AllArgsConstructor
 @Builder
+@ToString
 @Entity(name = "person")
 public class PersonModel {
     @Id
