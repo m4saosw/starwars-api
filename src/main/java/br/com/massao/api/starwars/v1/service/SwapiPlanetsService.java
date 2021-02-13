@@ -11,9 +11,12 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.Resource;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -26,45 +29,29 @@ public class SwapiPlanetsService {
     @Autowired
     private RestTemplate restTemplate;
 
+    // Auto referencia para funcionamento correto do proxy do cache, quando acionado por um metodo interno
+    @Resource
+    private SwapiPlanetsService self;
 
+
+    @Cacheable(value = "planet")
     public boolean existsPlanetByName(String name) {
         log.debug("existsPlanetByName name={}", name);
-        return findPlanet(name) != null;
-    }
 
-    @Cacheable(value = "planetCache", unless = "#result != null")
-    private String findPlanetOld(String name) {
-        Instant now = Instant.now();
-        final String url = endpoint.concat("/planets/?search=").concat(name);
-        log.debug("findPlanet name={} url={}", name, url);
+        // TODO - conversao em set pode ser colocada em outro cache
+        Set<PlanetSwapiResults> setPlanets = self.listAllPlanets().stream().filter(planet -> planet.getName().equals(name)).collect(Collectors.toSet());
 
-        ResponseEntity<PlanetSwapi> responses = restTemplate.getForEntity(url, PlanetSwapi.class);
-        log.debug("findPlanet name={} url={} results={} time={} ns", name, url, responses.getBody(), Instant.from(now).getNano());
-        return responses.hasBody() ? responses.getBody().getResults().get(0).getName() : null;
-    }
-
-    @Cacheable(value = "planetCache", unless = "#result != null")
-    private String findPlanet(String name) {
-        Instant now = Instant.now();
-        log.debug("findPlanet name={}", name);
-
-        List<PlanetSwapiResults> results = listAllPlanets();
-
-
-        //log.debug("findPlanet name={} results={} time={} ns", name, responses.getBody(), Instant.from(now).getNano());
-        log.debug("findPlanet name={} time={} ns", name, Instant.from(now).getNano());
-        //return responses.hasBody() ? responses.getBody().getResults().get(0).getName() : null;
-        List<PlanetSwapiResults> list = results.stream().filter(planet -> planet.getName().equals(name)).collect(Collectors.toList());
-        return list.isEmpty() ? null : list.get(0).getName();
+        log.debug("existsPlanetByName name={} found={} elapsedTime={} ms", name, setPlanets.size());
+        return ! setPlanets.isEmpty();
     }
 
 
     // TODO - adicionar busca resiliente, permitindo retorno parcial de sucesso
     // TODO - adicionar informacoes no log em caso de retorno parcial
     // TODO - refatorar
-    @Cacheable(value = "planetsCache")
+    @Cacheable(value = "planets")
     public List<PlanetSwapiResults> listAllPlanets() {
-        Instant now = Instant.now();
+        Instant instant = Instant.now();
 
         String url = endpoint.concat("/planets/");
         log.debug("listPlanets url={}", url);
@@ -99,9 +86,6 @@ public class SwapiPlanetsService {
 
         } while (hasMorePages);
 
-
-        log.debug("listAllPlanets results={} resultsSize={} time={} ns", results, results.size(), Instant.from(now).getNano());
         return results;
     }
-
 }
