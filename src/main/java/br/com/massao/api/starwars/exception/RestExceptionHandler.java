@@ -1,22 +1,31 @@
 package br.com.massao.api.starwars.exception;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.LocaleContextResolver;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.DateTimeException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
@@ -28,8 +37,11 @@ import java.time.DateTimeException;
 
 @Slf4j
 @Order(Ordered.HIGHEST_PRECEDENCE)
-@ControllerAdvice(annotations = RestController.class)
+@RestControllerAdvice(annotations = RestController.class)
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
+	// Classe para internacionalizacao das mensagens
+	@Autowired
+	MessageSource messageSource;
 
 	private ResponseEntity<Object> buildResponseEntity(ApiError apiError) {
 		return new ResponseEntity<>(apiError, apiError.getStatus());
@@ -111,10 +123,16 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		//return super.handleMethodArgumentNotValid(ex, headers, status, request);
 		String message = "Invalid arguments in body";
 		log.debug("handleMethodArgumentNotValid exception={}", ex);
-		log.debug("handleMethodArgumentNotValid getAllErrors={}", ex.getAllErrors());
 
+		List<ApiFieldError> apiFieldErrors = new ArrayList<>();
+		List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
+		fieldErrors.forEach(e -> {
+			String msg = messageSource.getMessage(e, LocaleContextHolder.getLocale());
+			ApiFieldError apiFieldError = new ApiFieldError(e.getField(), msg);
+			apiFieldErrors.add(apiFieldError);
+		});
 
-		return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, message, ex));
+		return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, message, ex, apiFieldErrors));
 	}
 
 
