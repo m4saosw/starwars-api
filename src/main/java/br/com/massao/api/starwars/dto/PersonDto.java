@@ -7,6 +7,7 @@ import lombok.*;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @NoArgsConstructor // Used by Jackson
 @AllArgsConstructor
@@ -19,7 +20,8 @@ public class PersonDto {
     private Long id;
 
     @JsonProperty("name")
-    @NotEmpty(message = "Name is empty")
+    @NotNull
+    @NotEmpty
     private String name;
 
     @JsonProperty("height")
@@ -31,15 +33,18 @@ public class PersonDto {
     private int mass;
 
     @JsonProperty("birth_year")
-    @NotEmpty(message = "birth_year is empty")
+    @NotNull
+    @NotEmpty
     private String birth_year;
 
     @JsonProperty("gender")
-    @NotEmpty(message = "gender is empty")
+    @NotNull
+    @NotEmpty
     private String gender;
 
     @JsonProperty("homeworld")
-    @NotEmpty(message = "homeworld is empty")
+    @NotNull
+    @NotEmpty
     private String homeworld;
 
     @JsonProperty("filmsExhibitions")

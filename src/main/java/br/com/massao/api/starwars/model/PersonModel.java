@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor // used by JPA
@@ -20,8 +21,10 @@ public class PersonModel {
     @GeneratedValue
     private Long id;
 
+    //@Column(name = "name", nullable = false)
     @Column(name = "name")
-    @NotEmpty(message = "Name is empty")
+    @NotNull
+    @NotEmpty
     private String name;
 
     @Column(name = "height")
@@ -33,15 +36,18 @@ public class PersonModel {
     private int mass;
 
     @Column(name = "birth_year")
-    @NotEmpty(message = "Birth_year is empty")
+    @NotNull
+    @NotEmpty
     private String birth_year;
 
     @Column(name = "gender")
-    @NotEmpty(message = "Gender is empty")
+    @NotNull
+    @NotEmpty
     private String gender;
 
     @Column(name = "homeworld")
-    @NotEmpty(message = "Homeworld is empty")
+    @NotNull
+    @NotEmpty
     private String homeworld;
 
 
