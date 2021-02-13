@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +26,7 @@ public class SwapiResource {
 
     @GetMapping("/planets")
     public List<PlanetDto> listAllPlanets() {
+        Instant start = Instant.now();
         log.debug("listAllPlanets");
 
         List<PlanetDto> planets = new ArrayList<>();
@@ -33,6 +36,7 @@ public class SwapiResource {
             planets.add(new PlanetDto(planet));
         });
 
+        log.debug("listAllPlanets results={} resultsSize={} elapsedTime={} ms", planets, planets.size(), Duration.between(start, Instant.now()).toMillis());
         return planets;
     }
 }

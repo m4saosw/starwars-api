@@ -13,6 +13,8 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import javax.validation.Validator;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -62,6 +64,7 @@ public class PeopleService {
      * @return
      */
     public PersonModel save(@Valid PersonModel person) {
+        Instant instant = Instant.now();
         log.debug("save person={}", person);
 
         // TODO - refactor - handler exception
@@ -69,9 +72,10 @@ public class PeopleService {
         if (! violations.isEmpty()) throw new ConstraintViolationException(violations);
 
         if (! planetsService.existsPlanetByName(person.getHomeworld())) throw new IllegalArgumentException("Homeworld is not a valid Planet in StarWars API");
+        log.debug("save - existsPlanetByName planet={} elapsedTime={} ms", person.getHomeworld(), Duration.between(instant, Instant.now()).toMillis());
 
-
-        return repository.save(person);
+        PersonModel save = repository.save(person);
+        return save;
     }
 
     /**
