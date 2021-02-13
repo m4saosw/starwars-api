@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -58,21 +59,17 @@ public class PeopleResource {
 
 
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody PersonDto person) {
+    public ResponseEntity<?> create(@Valid @RequestBody PersonDto person, UriComponentsBuilder uriBuilder) {
         log.info("create person={}", person);
 
         PersonModel personModel = new PersonModelConverter().modelFrom(person);
-
         PersonModel entity = peopleService.save(personModel);
 
-        URI location = URI.create(String.format("starwars-api/v1/people/%s", entity.getId()));
-
-
-//        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path(
-//                "/{id}").buildAndExpand(course.getId()).toUri();
-
         // nota: ResponseEntity retornando link do novo recurso no cabecalho da requisicao
-        return ResponseEntity.created(location).build();
+        // Alguns dizem que devolver body na requisicao nao e adequado pois aumenta o trafego de dados
+        URI uri = uriBuilder.path("/people/{id}").buildAndExpand(entity.getId()).toUri();
+
+        return ResponseEntity.created(uri).build();
     }
 
 
