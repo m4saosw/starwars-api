@@ -5,8 +5,10 @@ import br.com.massao.api.starwars.model.PersonModel;
 import br.com.massao.api.starwars.v1.repository.PeopleRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.ConstraintViolation;
@@ -15,6 +17,7 @@ import javax.validation.Valid;
 import javax.validation.Validator;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -37,6 +40,7 @@ public class PeopleService {
     /**
      * @return
      */
+    // TODO - @Cacheable(key = "people")
     public List<PersonModel> list() {
         log.debug("list");
 
@@ -47,7 +51,7 @@ public class PeopleService {
      * @param id
      * @return
      */
-    // mudar para ResourceNotFoundException ?
+    //TODO - @Cacheable(value = "person")
     public Optional<PersonModel> findById(Long id) throws NotFoundException {
         log.debug("findById id={}", id);
 
@@ -55,7 +59,8 @@ public class PeopleService {
 
         if (!person.isPresent()) throw new NotFoundException();
 
-        return person;
+        //return person;
+        return Optional.of(person).orElseThrow(NotFoundException::new);
     }
 
 
@@ -69,9 +74,10 @@ public class PeopleService {
 
         // TODO - refactor - handler exception
         Set<ConstraintViolation<PersonModel>> violations = validator.validate(person);
-        if (! violations.isEmpty()) throw new ConstraintViolationException(violations);
+        if (!violations.isEmpty()) throw new ConstraintViolationException(violations);
 
-        if (! planetsService.existsPlanetByName(person.getHomeworld())) throw new IllegalArgumentException("Homeworld is not a valid Planet in StarWars API");
+        if (!planetsService.existsPlanetByName(person.getHomeworld()))
+            throw new IllegalArgumentException("Homeworld is not a valid Planet in StarWars API");
         log.debug("save - existsPlanetByName planet={} elapsedTime={} ms", person.getHomeworld(), Duration.between(instant, Instant.now()).toMillis());
 
         PersonModel save = repository.save(person);
@@ -79,7 +85,6 @@ public class PeopleService {
     }
 
     /**
-     *
      * @param id
      * @throws NotFoundException
      */
@@ -88,7 +93,7 @@ public class PeopleService {
 
         try {
             repository.deleteById(id);
-        } catch(EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             throw new NotFoundException();
         }
     }
@@ -109,6 +114,45 @@ public class PeopleService {
         person.get().setMass((newPerson.getMass()));
         person.get().setHomeworld((newPerson.getHomeworld()));
 
+        // chamada explicita do metodo save devido a validacao do atributo homeworld
         return Optional.of(this.save(person.get()));
+    }
+
+
+    /**
+     * Bulk save of person
+     *
+     * @param people
+     * @return
+     */
+    // Exercitar o conceito de transacao do spring
+    // Anotacao Transactional explicita para facilitar entendimento, pois metodo saveall ja e transactional
+    // Obs:
+    // - transactional + multiplos save, tem o mesmo resultado, isto é, gera rollback em caso de falha
+    // - Valid - validacao novamente na camada de servico
+    @Transactional
+    public List<PersonModel> saveMany(@Valid List<PersonModel> people) {
+        Instant instant = Instant.now();
+        log.debug("save many person={}", people);
+
+        // TODO - refactor - handler exception
+        for (PersonModel person : people) {
+            Set<ConstraintViolation<PersonModel>> violations = validator.validate(person);
+            if (!violations.isEmpty()) throw new ConstraintViolationException(violations);
+
+            if (!planetsService.existsPlanetByName(person.getHomeworld()))
+                throw new IllegalArgumentException("Homeworld is not a valid Planet in StarWars API");
+            log.debug("save - existsPlanetByName planet={} elapsedTime={} ms", person.getHomeworld(), Duration.between(instant, Instant.now()).toMillis());
+        }
+
+        List<PersonModel> results = repository.saveAll(people);
+
+//        List<PersonModel> results = new ArrayList<>();
+//        for (PersonModel person : people) {
+//            results.add(repository.save(person));
+//        }
+//        // repository.saveAll(people);
+
+        return results;
     }
 }

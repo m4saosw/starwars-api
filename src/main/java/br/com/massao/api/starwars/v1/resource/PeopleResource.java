@@ -101,4 +101,30 @@ public class PeopleResource {
             return ResponseEntity.notFound().build();
         }
     }
+
+
+    @PostMapping("/more-than-one")
+    public ResponseEntity<?> createMany(@Valid @RequestBody List<PersonDto> people, UriComponentsBuilder uriBuilder) {
+        log.info("createMany people={}", people);
+
+        List<PersonModel> listModel = new ArrayList<>();
+
+        // Convert from Dto to Model
+        for (PersonDto person : people) {
+            PersonModel personModel = new PersonModelConverter().modelFrom(person);
+            listModel.add(personModel);
+        }
+
+        List<PersonModel> entities = peopleService.saveMany(listModel);
+
+        // Convert from Model to Dto
+        List<PersonDto> result = new ArrayList<>();
+        for (PersonModel entity : entities) {
+            result.add(new PersonDto(entity));
+        }
+
+        // Points to the list uri
+        URI uri = uriBuilder.path("/people").build().toUri();
+        return ResponseEntity.created(uri).body(result);
+    }
 }
