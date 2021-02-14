@@ -62,8 +62,7 @@ public class PeopleServiceImpl implements PeopleService {
 
         if (!person.isPresent()) throw new NotFoundException();
 
-        //return person;
-        return Optional.of(person).orElseThrow(NotFoundException::new);
+        return person;
     }
 
 
