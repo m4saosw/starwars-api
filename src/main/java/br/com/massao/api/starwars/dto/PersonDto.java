@@ -8,6 +8,9 @@ import lombok.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor // Used by Jackson
 @AllArgsConstructor
@@ -58,5 +61,14 @@ public class PersonDto {
         this.birth_year = model.getBirth_year();
         this.gender = model.getGender();
         this.homeworld = model.getHomeworld(); // TODO - query
+    }
+
+    /**
+     * Convert from Model to Dto
+     * @param people
+     * @return
+     */
+    public List<PersonDto> listPersonDtoFrom(List<PersonModel> people) {
+        return people.stream().map(model -> new PersonDto(model)).collect(Collectors.toList());
     }
 }

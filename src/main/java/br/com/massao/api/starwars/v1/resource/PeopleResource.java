@@ -25,6 +25,7 @@ import java.util.Optional;
 public class PeopleResource {
     @Autowired
     private PeopleService peopleService;
+    private PersonModelConverter converter = new PersonModelConverter();
 
     @GetMapping
     public List<PersonDto> list() {
@@ -62,7 +63,7 @@ public class PeopleResource {
     public ResponseEntity<?> create(@Valid @RequestBody PersonDto person, UriComponentsBuilder uriBuilder) {
         log.info("create person={}", person);
 
-        PersonModel personModel = new PersonModelConverter().modelFrom(person);
+        PersonModel personModel = converter.modelFrom(person);
         PersonModel entity = peopleService.save(personModel);
 
         // nota: ResponseEntity retornando link do novo recurso no cabecalho da requisicao
@@ -92,7 +93,7 @@ public class PeopleResource {
         log.info("modify id={} person={}", id, person);
 
         try {
-            PersonModel model = new PersonModelConverter().modelFrom(person);
+            PersonModel model = converter.modelFrom(person);
             Optional<PersonModel> modified = peopleService.update(id, model);
 
             return ResponseEntity.ok().body(new PersonDto(modified.get()));
@@ -107,21 +108,11 @@ public class PeopleResource {
     public ResponseEntity<?> createMany(@Valid @RequestBody List<PersonDto> people, UriComponentsBuilder uriBuilder) {
         log.info("createMany people={}", people);
 
-        List<PersonModel> listModel = new ArrayList<>();
-
-        // Convert from Dto to Model
-        for (PersonDto person : people) {
-            PersonModel personModel = new PersonModelConverter().modelFrom(person);
-            listModel.add(personModel);
-        }
+        List<PersonModel> listModel = converter.listModelFrom(people);
 
         List<PersonModel> entities = peopleService.saveMany(listModel);
 
-        // Convert from Model to Dto
-        List<PersonDto> result = new ArrayList<>();
-        for (PersonModel entity : entities) {
-            result.add(new PersonDto(entity));
-        }
+        List<PersonDto> result = new PersonDto().listPersonDtoFrom(entities);
 
         // Points to the list uri
         URI uri = uriBuilder.path("/people").build().toUri();
