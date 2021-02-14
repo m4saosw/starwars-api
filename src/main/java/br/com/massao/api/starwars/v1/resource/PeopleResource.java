@@ -31,15 +31,7 @@ public class PeopleResource {
     public List<PersonDto> list() {
         log.info("list");
 
-        List<PersonDto> people = new ArrayList<>();
-
-        // TODO - refactor
-        peopleService.list().forEach(person -> {
-            people.add(new PersonDto(person));
-        });
-
-        return people;
-
+        return new PersonDto().listPersonDtoFrom(peopleService.list());
     }
 
     @GetMapping("/{id}")
