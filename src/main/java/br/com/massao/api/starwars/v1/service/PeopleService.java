@@ -68,6 +68,7 @@ public class PeopleService {
      * @param person
      * @return
      */
+    @Transactional
     public PersonModel save(@Valid PersonModel person) {
         Instant instant = Instant.now();
         log.debug("save person={}", person);
@@ -88,6 +89,7 @@ public class PeopleService {
      * @param id
      * @throws NotFoundException
      */
+    @Transactional
     public void deleteById(Long id) throws NotFoundException {
         log.debug("deleteById id={}", id);
 
@@ -103,6 +105,7 @@ public class PeopleService {
      * @param newPerson
      * @return
      */
+    @Transactional
     public Optional<PersonModel> modify(Long id, PersonModel newPerson) throws NotFoundException {
         Optional<PersonModel> person = findById(id);
 
