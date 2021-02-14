@@ -13,6 +13,8 @@ import java.util.stream.Collectors;
 public class PersonModelConverter {
 
     public PersonModel modelFrom(PersonDto person) {
+        if (person == null) return null;
+
         PersonModel model = PersonModel.builder()
                 .name(person.getName())
                 .height(person.getHeight())
@@ -25,6 +27,8 @@ public class PersonModelConverter {
     }
 
     public List<PersonModel> listModelFrom(List<PersonDto> people) {
+        if (people == null) return null;
+
         return people.stream().map(person -> this.modelFrom(person)).collect(Collectors.toList());
     }
 }
