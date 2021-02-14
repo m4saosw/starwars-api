@@ -1,15 +1,13 @@
 package br.com.massao.api.starwars;
 
-import br.com.massao.api.starwars.model.PersonModel;
-import br.com.massao.api.starwars.v1.repository.PeopleRepository;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.context.annotation.Bean;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 
 @EnableCaching
 @SpringBootApplication
+//@EnableSpringDataWebSupport // receber os parâmetros de ordenação e paginação diretamente nos métodos do controller
 public class StartWarsApiApplication {
 
     public static void main(String[] args) {

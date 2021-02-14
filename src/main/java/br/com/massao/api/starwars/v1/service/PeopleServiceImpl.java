@@ -6,6 +6,8 @@ import br.com.massao.api.starwars.v1.repository.PeopleRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -46,6 +48,14 @@ public class PeopleServiceImpl implements PeopleService {
 
         return repository.findAll();
     }
+
+    @Override
+    public Page<PersonModel> list(Pageable pageable) {
+        log.debug("list");
+
+        return repository.findAll(pageable);
+    }
+
 
     /**
      * Find person by id

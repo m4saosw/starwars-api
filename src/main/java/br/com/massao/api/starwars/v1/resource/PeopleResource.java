@@ -7,6 +7,10 @@ import br.com.massao.api.starwars.model.PersonModel;
 import br.com.massao.api.starwars.v1.service.PeopleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,10 +32,10 @@ public class PeopleResource {
     private PersonModelConverter converter = new PersonModelConverter();
 
     @GetMapping
-    public List<PersonDto> list() {
-        log.info("list");
+    public Page<PersonDto> list(@PageableDefault(size = 5, sort = "id") Pageable pageRequest ) {
+        log.info("list with pageable={}", pageRequest);
 
-        return new PersonDto().listPersonDtoFrom(peopleService.list());
+        return new PersonDto().listPersonDtoFrom(peopleService.list(pageRequest));
     }
 
     @GetMapping("/{id}")

@@ -2,6 +2,8 @@ package br.com.massao.api.starwars.v1.service;
 
 import br.com.massao.api.starwars.exception.NotFoundException;
 import br.com.massao.api.starwars.model.PersonModel;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +20,13 @@ public interface PeopleService {
      * @return
      */
     List<PersonModel> list();
+
+    /**
+     * List all person
+     *
+     * @return
+     */
+    Page<PersonModel> list(Pageable pageable);
 
     /**
      * Find person by id

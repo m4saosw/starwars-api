@@ -7,29 +7,28 @@ import br.com.massao.api.starwars.v1.service.PeopleService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
-@ExtendWith(SpringExtension.class)
 @WebMvcTest(PeopleResource.class)  //  Auto-configure the Spring MVC infrastructure for unit tests
 public class PeopleResourceTest {
     @Autowired
@@ -38,7 +37,7 @@ public class PeopleResourceTest {
     @MockBean
     private PeopleService peopleService;
 
-    public static String asJsonString(final Object obj) {
+    private static String asJsonString(final Object obj) {
         try {
             return new ObjectMapper().writeValueAsString(obj);
         } catch (Exception e) {
@@ -55,19 +54,22 @@ public class PeopleResourceTest {
      */
 
     @Test
+    //@DisplayName("Test list not found returning 200")
     public void givenPeopleNotFoundWhenGetPeopleThenReturnStatus200() throws Exception {
         // given
         List<PersonModel> peopleModel = Arrays.asList();
+        Page<PersonModel> peoplePageModel = new PageImpl<>(peopleModel);
 
         // when
-        given(peopleService.list()).willReturn(peopleModel);
+        given(peopleService.list(any(Pageable.class))).willReturn(peoplePageModel);
 
         // then
         mvc.perform(get("/v1/people")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(0)));
+                //.andExpect(jsonPath("$", hasSize(0)));
+                .andExpect(jsonPath("$.content", hasSize(0)));
     }
 
     @Test
@@ -76,18 +78,21 @@ public class PeopleResourceTest {
         PersonModel person1 = PersonModel.builder().id(1L).birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
         PersonModel person2 = PersonModel.builder().id(2L).birth_year("11111").gender("female").height(123).homeworld("terra").mass(100).name("PERSON2").build();
         List<PersonModel> peopleModel = Arrays.asList(person1, person2);
+        Page<PersonModel> peoplePageModel = new PageImpl<>(peopleModel);
 
         // when
-        given(peopleService.list()).willReturn(peopleModel);
+        given(peopleService.list(any(Pageable.class))).willReturn(peoplePageModel);
 
         // then
         mvc.perform(get("/v1/people")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].name", is(person1.getName())))
-                .andExpect(jsonPath("$[1].name", is(person2.getName())));
+                //.andExpect(jsonPath("$['content']", hasSize(2)))
+                .andExpect(jsonPath("$.last", is (true))) // com paginacao
+                .andExpect(jsonPath("$.totalPages", is(1))) // com paginacao
+                .andExpect(jsonPath("$.content[0].name", is(person1.getName())))
+                .andExpect(jsonPath("$.content[1].name", is(person2.getName())));
     }
 
     /**

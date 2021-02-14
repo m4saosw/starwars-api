@@ -4,11 +4,11 @@ import br.com.massao.api.starwars.model.PersonModel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.springframework.data.domain.Page;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -70,5 +70,15 @@ public class PersonDto {
      */
     public List<PersonDto> listPersonDtoFrom(List<PersonModel> people) {
         return people.stream().map(model -> new PersonDto(model)).collect(Collectors.toList());
+    }
+
+
+    /**
+     * Convert from Model to Dto with pagination
+     * @param people
+     * @return
+     */
+    public Page<PersonDto> listPersonDtoFrom(Page<PersonModel> people) {
+        return people.map(person -> new PersonDto(person));
     }
 }
