@@ -88,12 +88,12 @@ public class PeopleResource {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> modify(@PathVariable("id") Long id, @Valid @RequestBody PersonDto person) {
+    public ResponseEntity<?> update(@PathVariable("id") Long id, @Valid @RequestBody PersonDto person) {
         log.info("modify id={} person={}", id, person);
 
         try {
             PersonModel model = new PersonModelConverter().modelFrom(person);
-            Optional<PersonModel> modified = peopleService.modify(id, model);
+            Optional<PersonModel> modified = peopleService.update(id, model);
 
             return ResponseEntity.ok().body(new PersonDto(modified.get()));
 

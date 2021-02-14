@@ -214,7 +214,7 @@ public class PeopleServiceTest {
         Mockito.when(peopleRepository.save(any())).thenReturn(person1);
 
         // when
-        peopleService.modify(person1.getId(), person1);
+        peopleService.update(person1.getId(), person1);
 
         // then
         verify(peopleRepository).findById(any());
@@ -230,7 +230,7 @@ public class PeopleServiceTest {
 
         // when/then
         Assertions.assertThatExceptionOfType(NotFoundException.class).isThrownBy(
-                () -> peopleService.modify(9999L, model));
+                () -> peopleService.update(9999L, model));
     }
 
     @Test()
@@ -242,7 +242,7 @@ public class PeopleServiceTest {
 
         // when/then
         Assertions.assertThatExceptionOfType(ConstraintViolationException.class).isThrownBy(
-                () -> peopleService.modify(9999L, person1));
+                () -> peopleService.update(9999L, person1));
     }
 
     @Test()
@@ -255,7 +255,7 @@ public class PeopleServiceTest {
 
         // when/then
         Assertions.assertThatExceptionOfType(ConstraintViolationException.class).isThrownBy(
-                () -> peopleService.modify(9999L, person1));
+                () -> peopleService.update(9999L, person1));
     }
 
     /**
@@ -265,7 +265,7 @@ public class PeopleServiceTest {
     static class PeopleServiceTestContextConfiguration {
         @Bean
         public PeopleService peopleService() {
-            return new PeopleService();
+            return new PeopleServiceImpl();
 
         }
 

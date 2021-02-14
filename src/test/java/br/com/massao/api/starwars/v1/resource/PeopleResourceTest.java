@@ -12,14 +12,10 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -217,7 +213,7 @@ public class PeopleResourceTest {
         PersonModel person1 = PersonModel.builder().id(1L).birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
 
         // when
-        Mockito.when(peopleService.modify(anyLong(), any())).thenThrow(NotFoundException.class);
+        Mockito.when(peopleService.update(anyLong(), any())).thenThrow(NotFoundException.class);
 
         // then
         String jsonObject = asJsonString(new PersonDto(person1));
@@ -235,7 +231,7 @@ public class PeopleResourceTest {
         PersonModel person2 = PersonModel.builder().birth_year("11111").gender("female").height(123).homeworld("terra").mass(100).name("PERSON2").build();
 
         // when
-        given(peopleService.modify(anyLong(), any())).willReturn(Optional.of(person2));
+        given(peopleService.update(anyLong(), any())).willReturn(Optional.of(person2));
 
         // then
         String jsonObject = asJsonString(new PersonDto(person2));
