@@ -103,7 +103,7 @@ public class PeopleResource {
     }
 
 
-    @PostMapping("/more-than-one")
+    @PostMapping("/create-many")
     public ResponseEntity<?> createMany(@Valid @RequestBody List<PersonDto> people, UriComponentsBuilder uriBuilder) {
         log.info("createMany people={}", people);
 
