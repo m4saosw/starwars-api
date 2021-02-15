@@ -31,6 +31,7 @@ logging:
       springframework:
         web: WARN
         cache : TRACE
+        security: DEBUG
       hibernate: WARN
     br:
       com:
