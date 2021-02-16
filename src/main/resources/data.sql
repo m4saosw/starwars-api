@@ -1,6 +1,10 @@
 -- populates database on startup
-INSERT INTO USER(name, username, password) VALUES('name of the user1', 'aluno@email.com', '$2a$10$sFKmbxbG4ryhwPNx/l3pgOJSt.fW1z6YcUnuE2X8APA/Z3NI/oSpq');
---INSERT INTO USER(name, username, password) VALUES('name of the user2', 'aluno@email.com', '$2a$10$sFKmbxbG4ryhwPNx/l3pgOJSt.fW1z6YcUnuE2X8APA/Z3NI/oSpq');
+
+-- password userAdmin1 123456
+INSERT INTO USER(name, username, password) VALUES('This is the full username 1', 'userAdmin1', '$2a$10$sFKmbxbG4ryhwPNx/l3pgOJSt.fW1z6YcUnuE2X8APA/Z3NI/oSpq');
+
+-- password user1 123456
+INSERT INTO USER(name, username, password) VALUES('This is the full username 2', 'user1', '$2a$10$sFKmbxbG4ryhwPNx/l3pgOJSt.fW1z6YcUnuE2X8APA/Z3NI/oSpq');
 
 
 INSERT INTO PROFILE(id, name) VALUES (1, 'ROLE_ADMIN');
