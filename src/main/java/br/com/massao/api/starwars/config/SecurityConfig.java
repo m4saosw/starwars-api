@@ -60,13 +60,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         //@formatter:off
         http.authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/").permitAll()  // permit all GET
-                .antMatchers(HttpMethod.GET, "/**").permitAll()  // permit all GET
-                .antMatchers(HttpMethod.POST, "/v1/people").permitAll()  // except create-many
-                //.antMatchers(HttpMethod.POST, "/v1/people/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/").permitAll()
+                .antMatchers(HttpMethod.GET, "/**").permitAll()
+
+                .antMatchers(HttpMethod.POST, "/v1/people").permitAll()
+                .antMatchers(HttpMethod.POST, "/v1/people/create-many").hasRole("ADMIN")
+
                 .antMatchers(HttpMethod.PUT, "/v1/people/**").permitAll()
+
                 .antMatchers(HttpMethod.DELETE, "/v1/people/**").hasRole("ADMIN")
+
                 .antMatchers(HttpMethod.POST, "/auth").permitAll()
+
                 .antMatchers("/h2/**").permitAll()  // acesso ao console h2
                 .anyRequest().authenticated()
                 .and().csrf().disable() // disable CORS
