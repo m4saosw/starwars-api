@@ -1,16 +1,43 @@
 package br.com.massao.api.starwars.config;
 
+import br.com.massao.api.starwars.security.config.AuthenticationByTokenFilter;
+import br.com.massao.api.starwars.security.config.AuthenticationService;
+import br.com.massao.api.starwars.security.config.TokenService;
+import br.com.massao.api.starwars.security.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private AuthenticationService authenticationService;
+
+    @Autowired
+    private TokenService tokenService;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Override
+    @Bean
+    protected AuthenticationManager authenticationManager() throws Exception {
+        return super.authenticationManager();
+    }
+
+
     /**
      * Authentication
      *
@@ -19,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        super.configure(auth);
+        auth.userDetailsService(authenticationService).passwordEncoder(new BCryptPasswordEncoder());
     }
 
 
@@ -31,13 +58,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
-        http.csrf().disable() // disable CORS
-        .authorizeRequests()
+        //@formatter:off
+        http.authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/").permitAll()  // permit all GET
                 .antMatchers(HttpMethod.GET, "/**").permitAll()  // permit all GET
                 .antMatchers(HttpMethod.POST, "/v1/people").permitAll()  // except create-many
-                .antMatchers(HttpMethod.PUT, "/v1/people").permitAll()
-                .anyRequest().authenticated();
+                //.antMatchers(HttpMethod.POST, "/v1/people/**").permitAll()
+                .antMatchers(HttpMethod.PUT, "/v1/people/**").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/v1/people/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/auth").permitAll()
+                .antMatchers("/h2/**").permitAll()  // acesso ao console h2
+                .anyRequest().authenticated()
+                .and().csrf().disable() // disable CORS
+
+                // necessario para o console web do h2 (https://jessitron.com/2020/06/15/spring-security-for-h2-console/)
+                .headers().frameOptions().sameOrigin()
+
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Nao usar sessao
+                .and().addFilterBefore(new AuthenticationByTokenFilter(tokenService, userRepository), UsernamePasswordAuthenticationFilter.class);
+        //@formatter:on
     }
 
     /**
