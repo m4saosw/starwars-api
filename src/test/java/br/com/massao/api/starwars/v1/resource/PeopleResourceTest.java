@@ -1,20 +1,23 @@
 package br.com.massao.api.starwars.v1.resource;
 
+import br.com.massao.api.starwars.StartWarsApiApplication;
 import br.com.massao.api.starwars.dto.PersonDto;
 import br.com.massao.api.starwars.exception.NotFoundException;
 import br.com.massao.api.starwars.model.PersonModel;
 import br.com.massao.api.starwars.v1.service.PeopleService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
@@ -29,13 +32,21 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(PeopleResource.class)  //  Auto-configure the Spring MVC infrastructure for unit tests
+//@WebMvcTest(PeopleResource.class)  //  Auto-configure the Spring MVC infrastructure for unit tests
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT) // Com o WebMvcTest nao estava funcionando a configuracao de segurança
+//@ContextConfiguration(classes={StartWarsApiApplication.class, SecurityConfig.class, TokenService.class})
+@ContextConfiguration(classes={StartWarsApiApplication.class })
+@AutoConfigureMockMvc
 public class PeopleResourceTest {
     @Autowired
     private MockMvc mvc;
 
     @MockBean
     private PeopleService peopleService;
+//
+//    @Autowired
+//    private WebApplicationContext context;
+
 
     private static String asJsonString(final Object obj) {
         try {
@@ -45,9 +56,14 @@ public class PeopleResourceTest {
         }
     }
 
-    @BeforeEach
-    public void setUp() {
-    }
+//    @BeforeEach
+//    public void setUp() {
+//        mvc = MockMvcBuilders
+//                .webAppContextSetup(context)
+//                .apply(springSecurity(springSecurityFilterChain))
+//                .build();
+//        //
+//    }
 
     /**
      * LIST TEST CASES
@@ -55,6 +71,7 @@ public class PeopleResourceTest {
 
     @Test
     //@DisplayName("Test list not found returning 200")
+    //@WithMockUser(value = "userAdmin1", password = "123456", authorities = "ADMIN")
     public void givenPeopleNotFoundWhenGetPeopleThenReturnStatus200() throws Exception {
         // given
         List<PersonModel> peopleModel = Arrays.asList();
@@ -179,6 +196,7 @@ public class PeopleResourceTest {
      */
 
     @Test
+    @WithMockUser(value = "userAdmin1", password = "123456", authorities = "ROLE_ADMIN")
     public void givenNotFoundWhenDeleteByIdPersonThenReturnStatus404() throws Exception {
         // given
 
@@ -193,6 +211,7 @@ public class PeopleResourceTest {
     }
 
     @Test
+    @WithMockUser(value = "userAdmin1", password = "123456", authorities = "ROLE_ADMIN")
     public void givenPersonWhenDeleteByIdPersonThenDeleteAndReturnStatus204() throws Exception {
         // given
         PersonModel person1 = PersonModel.builder().id(1L).birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
@@ -256,4 +275,6 @@ public class PeopleResourceTest {
 
     // se for excecao e der erro, validar o content type do erro
     // https://blog.runscope.com/posts/6-common-api-errors
+
+
 }

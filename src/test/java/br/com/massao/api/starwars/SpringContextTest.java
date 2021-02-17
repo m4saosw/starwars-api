@@ -8,7 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
  *  Will fail if the application context cannot start
  */
 //@RunWith(SpringRunner.class)
-@SpringBootTest
+//@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SpringContextTest {
 
     @Test
