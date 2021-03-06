@@ -10,10 +10,13 @@ import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.schema.ModelRef;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 @Configuration
 @EnableWebMvc
@@ -36,6 +39,7 @@ public class SwaggerConfig {
                 .paths(PathSelectors.ant("/**"))
                 .build()
                 .ignoredParameterTypes(UserModel.class)
+                .apiInfo(apiInfo())
 
                 // Devido a seguranca, adicionaremos um parametro chamado Authorization para apoio na autorizacao via formulario swagger
                 .globalOperationParameters(
@@ -68,5 +72,15 @@ public class SwaggerConfig {
                 registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
             }
         };
+    }
+
+    private ApiInfo apiInfo() {
+        return new ApiInfo(
+                "My Star Wars API Documentation",
+                "A little REST CRUD API for study purposes that consumes the API 'Star Wars API'",
+                "1.0",
+                "Terms of service",
+                new Contact("M4sao", "www.url.com", ""),
+                "Apache 2.0", "http://www.apache.org/licenses/LICENSE-2.0", Collections.emptyList());
     }
 }
