@@ -27,7 +27,7 @@ public class AuthenticationResource {
 	@Autowired
 	private TokenService tokenService;
 
-	@ApiOperation(value = "Generate an authorization token")
+	@ApiOperation(value = "Generate an authentication token", notes = "Insert a generated token into a protected resource")
 	@PostMapping
 	public ResponseEntity<TokenDto> authenticate(@RequestBody @Valid LoginForm form) {
 		UsernamePasswordAuthenticationToken loginData = form.converter();

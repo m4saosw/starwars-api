@@ -22,7 +22,7 @@ public class SwapiResource {
     private SwapiPlanetsService service;
 
 
-    @ApiOperation(value = "List all planets", notes = "This operation gets all planets from swapi API. Fill the homeworld field with one of the valid planets of this list")
+    @ApiOperation(value = "List all planets", notes = "This operation gets all planets from swapi API. Use a planet of this list into homeworld field when inserting or updating a person resource")
     @GetMapping("/planets")
     public List<PlanetDto> listAllPlanets() {
         Instant start = Instant.now();
