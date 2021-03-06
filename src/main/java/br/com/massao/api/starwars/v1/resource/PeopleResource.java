@@ -1,6 +1,7 @@
 package br.com.massao.api.starwars.v1.resource;
 
 import br.com.massao.api.starwars.converter.PersonModelConverter;
+import br.com.massao.api.starwars.dto.InputPersonDto;
 import br.com.massao.api.starwars.dto.PersonDto;
 import br.com.massao.api.starwars.exception.NotFoundException;
 import br.com.massao.api.starwars.model.PersonModel;
@@ -57,7 +58,7 @@ public class PeopleResource {
 
     @ApiOperation(value = "Create a person")
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody PersonDto person, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<?> create(@Valid @RequestBody InputPersonDto person, UriComponentsBuilder uriBuilder) {
         log.info("create person={}", person);
 
         PersonModel personModel = converter.modelFrom(person);
@@ -87,7 +88,7 @@ public class PeopleResource {
 
     @ApiOperation(value = "Update a person")
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable("id") Long id, @Valid @RequestBody PersonDto person) {
+    public ResponseEntity<?> update(@PathVariable("id") Long id, @Valid @RequestBody InputPersonDto person) {
         log.info("modify id={} person={}", id, person);
 
         try {
@@ -103,7 +104,7 @@ public class PeopleResource {
 
     @ApiOperation(value = "Create many people")
     @PostMapping("/create-many")
-    public ResponseEntity<?> createMany(@Valid @RequestBody List<PersonDto> people, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<?> createMany(@Valid @RequestBody List<InputPersonDto> people, UriComponentsBuilder uriBuilder) {
         log.info("createMany people={}", people);
 
         List<PersonModel> listModel = converter.listModelFrom(people);
