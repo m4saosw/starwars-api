@@ -13,7 +13,9 @@
     <artifactId>starwars-api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>starwars-api</name>
-    <description>A little REST CRUD API that consumes Star Wars API, using Spring (Boot, Web, Cache, Data, Security/JWT) </description>
+    <description>A little REST CRUD API that consumes Star Wars API, using Spring (Boot, Web, Cache, Data,
+        Security/JWT)
+    </description>
 
     <properties>
         <java.version>1.8</java.version>
@@ -28,12 +30,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-<!--            <exclusions>-->
-<!--                <exclusion>-->
-<!--                    <groupId>org.springframework.boot</groupId>-->
-<!--                    <artifactId>spring-boot-starter-logging</artifactId>-->
-<!--                </exclusion>-->
-<!--            </exclusions>-->
+            <!--            <exclusions>-->
+            <!--                <exclusion>-->
+            <!--                    <groupId>org.springframework.boot</groupId>-->
+            <!--                    <artifactId>spring-boot-starter-logging</artifactId>-->
+            <!--                </exclusion>-->
+            <!--            </exclusions>-->
         </dependency>
 
         <dependency>
@@ -93,7 +95,26 @@
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
-            <!--<version>0.9.1</version>-->
+            <version>0.9.1</version>
+        </dependency>
+
+
+        <!-- Documentacao da api com swagger e spring-fox -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${swagger.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-core</artifactId>
+            <version>${swagger.version}</version>
         </dependency>
     </dependencies>
 
