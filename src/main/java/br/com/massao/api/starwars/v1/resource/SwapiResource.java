@@ -2,6 +2,7 @@ package br.com.massao.api.starwars.v1.resource;
 
 import br.com.massao.api.starwars.dto.PlanetDto;
 import br.com.massao.api.starwars.v1.service.SwapiPlanetsService;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,7 @@ public class SwapiResource {
     private SwapiPlanetsService service;
 
 
+    @ApiOperation(value = "List all planets", notes = "This operation gets all planets from swapi API. Fill the homeworld field with one of the valid planets of this list")
     @GetMapping("/planets")
     public List<PlanetDto> listAllPlanets() {
         Instant start = Instant.now();

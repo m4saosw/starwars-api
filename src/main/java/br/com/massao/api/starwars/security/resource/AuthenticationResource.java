@@ -3,6 +3,7 @@ package br.com.massao.api.starwars.security.resource;
 import br.com.massao.api.starwars.security.config.TokenService;
 import br.com.massao.api.starwars.security.dto.TokenDto;
 import br.com.massao.api.starwars.security.form.LoginForm;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,6 +27,7 @@ public class AuthenticationResource {
 	@Autowired
 	private TokenService tokenService;
 
+	@ApiOperation(value = "Generate an authorization token")
 	@PostMapping
 	public ResponseEntity<TokenDto> authenticate(@RequestBody @Valid LoginForm form) {
 		UsernamePasswordAuthenticationToken loginData = form.converter();

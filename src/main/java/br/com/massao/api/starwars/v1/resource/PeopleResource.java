@@ -5,6 +5,7 @@ import br.com.massao.api.starwars.dto.PersonDto;
 import br.com.massao.api.starwars.exception.NotFoundException;
 import br.com.massao.api.starwars.model.PersonModel;
 import br.com.massao.api.starwars.v1.service.PeopleService;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,6 +30,7 @@ public class PeopleResource {
     private PeopleService peopleService;
     private PersonModelConverter converter = new PersonModelConverter();
 
+    @ApiOperation(value = "List all people")
     @GetMapping
     public Page<PersonDto> list(@PageableDefault(size = 5, sort = "id") Pageable pageRequest ) {
         log.info("list with pageable={}", pageRequest);
@@ -36,6 +38,7 @@ public class PeopleResource {
         return new PersonDto().listPersonDtoFrom(peopleService.list(pageRequest));
     }
 
+    @ApiOperation(value = "Find a person by id")
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable("id") Long id) {
         log.info("findById id={}", id);
@@ -52,7 +55,7 @@ public class PeopleResource {
         return new ResponseEntity<>(new PersonDto(person.get()), HttpStatus.OK);
     }
 
-
+    @ApiOperation(value = "Create a person")
     @PostMapping
     public ResponseEntity<?> create(@Valid @RequestBody PersonDto person, UriComponentsBuilder uriBuilder) {
         log.info("create person={}", person);
@@ -68,6 +71,7 @@ public class PeopleResource {
     }
 
 
+    @ApiOperation(value = "Delete a person")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteById(@PathVariable("id") Long id) {
         log.info("deleteById id={}", id);
@@ -81,7 +85,7 @@ public class PeopleResource {
         }
     }
 
-
+    @ApiOperation(value = "Update a person")
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable("id") Long id, @Valid @RequestBody PersonDto person) {
         log.info("modify id={} person={}", id, person);
@@ -97,7 +101,7 @@ public class PeopleResource {
         }
     }
 
-
+    @ApiOperation(value = "Create many people")
     @PostMapping("/create-many")
     public ResponseEntity<?> createMany(@Valid @RequestBody List<PersonDto> people, UriComponentsBuilder uriBuilder) {
         log.info("createMany people={}", people);
