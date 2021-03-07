@@ -72,6 +72,7 @@ public class PeopleResource {
     @ApiResponses(value={
             @ApiResponse(code=201, message="Created"),
             @ApiResponse(code=400, message="Bad Request", response = ApiError.class),
+            @ApiResponse(code=403, message="Access Denied. Please authenticate first to get a valid token. Only USER or ADMIN roles are permitted."),
             @ApiResponse(code=500, message="Internal Server Error", response = ApiError.class)
     })
     public ResponseEntity<?> create(@Valid @RequestBody InputPerson person, UriComponentsBuilder uriBuilder) {
