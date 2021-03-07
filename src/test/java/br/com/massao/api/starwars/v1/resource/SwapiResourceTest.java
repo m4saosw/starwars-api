@@ -56,7 +56,7 @@ class SwapiResourceTest {
      */
 
     @Test
-    void givenPlanetNotFoundWhenListAllPlanetsThenReturnStatus200() throws Exception {
+    void givenPlanetNotFoundWhenListAllPlanetsThenReturnEmptyAndStatus200() throws Exception {
         // given
         given(service.listAllPlanets()).willReturn(new ArrayList<>());
 
@@ -65,7 +65,7 @@ class SwapiResourceTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$").doesNotExist());
+                .andExpect(jsonPath("$").isEmpty());
     }
 
     @Test
