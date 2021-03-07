@@ -1,7 +1,7 @@
 
 package br.com.massao.api.starwars.dto;
 
-import br.com.massao.api.starwars.v1.swapi.PlanetSwapiResults;
+import br.com.massao.api.starwars.v1.swapi.PlanetSwapiResult;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.ToString;
@@ -24,7 +24,7 @@ public class PlanetDto {
         this.name = name;
     }
 
-    public PlanetDto(PlanetSwapiResults planet) {
+    public PlanetDto(PlanetSwapiResult planet) {
         this.name = planet.getName();
     }
 }

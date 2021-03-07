@@ -7,7 +7,7 @@ import lombok.ToString;
 
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PlanetSwapiResults {
+public class PlanetSwapiResult {
 
     @JsonProperty("name")
     private String name;
@@ -28,7 +28,7 @@ public class PlanetSwapiResults {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        PlanetSwapiResults that = (PlanetSwapiResults) o;
+        PlanetSwapiResult that = (PlanetSwapiResult) o;
 
         return name.equals(that.name);
     }

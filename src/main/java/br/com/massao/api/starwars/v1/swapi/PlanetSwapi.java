@@ -25,7 +25,7 @@ public class PlanetSwapi {
     @JsonProperty("previous")
     private String previous;
     @JsonProperty("results")
-    private List<PlanetSwapiResults> results = null;
+    private List<PlanetSwapiResult> results = null;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -60,12 +60,12 @@ public class PlanetSwapi {
     }
 
     @JsonProperty("results")
-    public List<PlanetSwapiResults> getResults() {
+    public List<PlanetSwapiResult> getResults() {
         return results;
     }
 
     @JsonProperty("results")
-    public void setResults(List<PlanetSwapiResults> results) {
+    public void setResults(List<PlanetSwapiResult> results) {
         this.results = results;
     }
 

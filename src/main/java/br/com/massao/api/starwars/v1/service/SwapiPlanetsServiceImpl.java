@@ -1,7 +1,7 @@
 package br.com.massao.api.starwars.v1.service;
 
 import br.com.massao.api.starwars.v1.swapi.PlanetSwapi;
-import br.com.massao.api.starwars.v1.swapi.PlanetSwapiResults;
+import br.com.massao.api.starwars.v1.swapi.PlanetSwapiResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,7 +38,7 @@ public class SwapiPlanetsServiceImpl implements SwapiPlanetsService {
         log.debug("existsPlanetByName name={}", name);
 
         // TODO - conversao em set pode ser colocada em outro cache
-        Set<PlanetSwapiResults> setPlanets = self.listAllPlanets().stream().filter(planet -> planet.getName().equals(name)).collect(Collectors.toSet());
+        Set<PlanetSwapiResult> setPlanets = self.listAllPlanets().stream().filter(planet -> planet.getName().equals(name)).collect(Collectors.toSet());
 
         log.debug("existsPlanetByName name={} found={} elapsedTime={} ms", name, setPlanets.size());
         return ! setPlanets.isEmpty();
@@ -50,7 +50,7 @@ public class SwapiPlanetsServiceImpl implements SwapiPlanetsService {
     // TODO - refatorar
     @Cacheable(value = "planets")
     @Override
-    public List<PlanetSwapiResults> listAllPlanets() {
+    public List<PlanetSwapiResult> listAllPlanets() {
         Instant instant = Instant.now();
 
         String url = endpoint.concat("/planets/");
@@ -61,7 +61,7 @@ public class SwapiPlanetsServiceImpl implements SwapiPlanetsService {
         HttpEntity<?> entity = new HttpEntity<>(headers);
 
 
-        List<PlanetSwapiResults> results = new ArrayList<>();
+        List<PlanetSwapiResult> results = new ArrayList<>();
         boolean hasMorePages = true;
 
         // leitura em blocos por pagina

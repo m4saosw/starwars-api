@@ -1,8 +1,7 @@
 package br.com.massao.api.starwars.v1.service;
 
 import br.com.massao.api.starwars.v1.swapi.PlanetSwapi;
-import br.com.massao.api.starwars.v1.swapi.PlanetSwapiResults;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import br.com.massao.api.starwars.v1.swapi.PlanetSwapiResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,12 +44,12 @@ class SwapiPlanetsServiceImplTest {
      * Massa de teste
      * @return
      */
-    private List<PlanetSwapiResults> getPlanets() {
-        List<PlanetSwapiResults> results = new ArrayList<>();
-        results.add(new PlanetSwapiResults());
+    private List<PlanetSwapiResult> getPlanets() {
+        List<PlanetSwapiResult> results = new ArrayList<>();
+        results.add(new PlanetSwapiResult());
         results.get(0).setName("planet1");
 
-        results.add(new PlanetSwapiResults());
+        results.add(new PlanetSwapiResult());
         results.get(1).setName("planet2");
         return results;
     }
@@ -62,7 +61,7 @@ class SwapiPlanetsServiceImplTest {
     @Test
     void givenValidPlanetNameWhenExistsPlanetByNameThenReturnTrue() {
         // given
-        List<PlanetSwapiResults> results = getPlanets();
+        List<PlanetSwapiResult> results = getPlanets();
         Mockito.when(self.listAllPlanets()).thenReturn(results);
 
         // when
@@ -92,7 +91,7 @@ class SwapiPlanetsServiceImplTest {
     @Test
     void givenPlanetsOnSinglePageWhenlistAllPlanetsThenReturnPlanets() {
         // GIVEN
-        List<PlanetSwapiResults> planets = getPlanets(); // planets
+        List<PlanetSwapiResult> planets = getPlanets(); // planets
 
         // entity body
         PlanetSwapi planetSwapi = new PlanetSwapi();
@@ -110,7 +109,7 @@ class SwapiPlanetsServiceImplTest {
         
         
         // WHEN
-        List<PlanetSwapiResults> results = swapiPlanetsService.listAllPlanets();
+        List<PlanetSwapiResult> results = swapiPlanetsService.listAllPlanets();
 
         // THEN
         assertThat(results).isNotNull();
@@ -122,7 +121,7 @@ class SwapiPlanetsServiceImplTest {
     @Test
     void givenPlanetsNotFoundWhenlistAllPlanetsThenReturnEmpty() {
         // GIVEN
-        List<PlanetSwapiResults> planets = new ArrayList<>(); // no results
+        List<PlanetSwapiResult> planets = new ArrayList<>(); // no results
 
         // entity body
         PlanetSwapi planetSwapi = new PlanetSwapi();
@@ -140,7 +139,7 @@ class SwapiPlanetsServiceImplTest {
 
 
         // WHEN
-        List<PlanetSwapiResults> results = swapiPlanetsService.listAllPlanets();
+        List<PlanetSwapiResult> results = swapiPlanetsService.listAllPlanets();
 
         // THEN
         assertThat(results).isEmpty();

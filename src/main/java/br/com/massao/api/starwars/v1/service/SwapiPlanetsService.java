@@ -1,6 +1,6 @@
 package br.com.massao.api.starwars.v1.service;
 
-import br.com.massao.api.starwars.v1.swapi.PlanetSwapiResults;
+import br.com.massao.api.starwars.v1.swapi.PlanetSwapiResult;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,5 +9,5 @@ import java.util.List;
 public interface SwapiPlanetsService {
     boolean existsPlanetByName(String name);
 
-    List<PlanetSwapiResults> listAllPlanets();
+    List<PlanetSwapiResult> listAllPlanets();
 }

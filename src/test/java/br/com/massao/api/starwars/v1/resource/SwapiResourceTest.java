@@ -2,7 +2,7 @@ package br.com.massao.api.starwars.v1.resource;
 
 import br.com.massao.api.starwars.StartWarsApiApplication;
 import br.com.massao.api.starwars.v1.service.SwapiPlanetsService;
-import br.com.massao.api.starwars.v1.swapi.PlanetSwapiResults;
+import br.com.massao.api.starwars.v1.swapi.PlanetSwapiResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,12 +40,12 @@ class SwapiResourceTest {
      * Massa de teste
      * @return
      */
-    private List<PlanetSwapiResults> getPlanets() {
-        List<PlanetSwapiResults> results = new ArrayList<>();
-        results.add(new PlanetSwapiResults());
+    private List<PlanetSwapiResult> getPlanets() {
+        List<PlanetSwapiResult> results = new ArrayList<>();
+        results.add(new PlanetSwapiResult());
         results.get(0).setName("planet1");
 
-        results.add(new PlanetSwapiResults());
+        results.add(new PlanetSwapiResult());
         results.get(1).setName("planet2");
         return results;
     }
@@ -71,7 +71,7 @@ class SwapiResourceTest {
     @Test
     void givenPlanetsWhenListAllPlanetsThenReturnPlanetsStatus200() throws Exception {
         // given
-        List<PlanetSwapiResults> planets = getPlanets();
+        List<PlanetSwapiResult> planets = getPlanets();
         given(service.listAllPlanets()).willReturn(planets);
 
         // when / then
