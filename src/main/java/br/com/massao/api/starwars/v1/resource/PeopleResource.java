@@ -37,7 +37,7 @@ public class PeopleResource {
     @ApiOperation(value = "List all people")
     @GetMapping
     @ApiResponses(value={
-            @ApiResponse(code=500, message="Internal Server Error. Please try again later. If persist please contact the admin")
+            @ApiResponse(code=500, message="Internal Server Error")
     })
     public Page<PersonDto> list(@PageableDefault(size = 5, sort = "id") Pageable pageRequest ) {
         log.info("list with pageable={}", pageRequest);
