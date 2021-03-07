@@ -40,6 +40,7 @@ public class SwaggerConfig {
                 .build()
                 .ignoredParameterTypes(UserModel.class)
                 .apiInfo(apiInfo())
+                .useDefaultResponseMessages(false)
 
                 // Devido a seguranca, adicionaremos um parametro chamado Authorization para apoio na autorizacao via formulario swagger
                 .globalOperationParameters(
