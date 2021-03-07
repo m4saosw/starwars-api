@@ -228,11 +228,12 @@ public class PeopleResourceTest {
 
 
     /**
-     * MODIFY TEST CASES
+     * UPDATE TEST CASES
      */
 
     @Test
-    public void givenNotFoundWhenModifyPersonThenReturnStatus404() throws Exception {
+    @WithMockUser(value = "user1", password = "123456", authorities = "ROLE_USER")
+    public void givenNotFoundWhenUpdatePersonThenReturnStatus404() throws Exception {
         // given
         PersonModel person1 = PersonModel.builder().id(1L).birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
 
@@ -249,7 +250,8 @@ public class PeopleResourceTest {
     }
 
     @Test
-    public void givenPersonWhenModifyThenReturnPersonWithStatus200() throws Exception {
+    @WithMockUser(value = "user1", password = "123456", authorities = "ROLE_USER")
+    public void givenPersonWhenUpdateThenReturnPersonWithStatus200() throws Exception {
         // given
         PersonModel person1 = PersonModel.builder().id(1L).birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
         PersonModel person2 = PersonModel.builder().birth_year("11111").gender("female").height(123).homeworld("terra").mass(100).name("PERSON2").build();
