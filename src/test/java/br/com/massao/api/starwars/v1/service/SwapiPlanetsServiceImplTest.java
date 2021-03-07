@@ -55,13 +55,9 @@ class SwapiPlanetsServiceImplTest {
         return results;
     }
 
-    private static String asJsonString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+    /**
+     * ExistsPlanetByName TEST CASES
+     */
 
     @Test
     void givenValidPlanetNameWhenExistsPlanetByNameThenReturnTrue() {
@@ -76,9 +72,6 @@ class SwapiPlanetsServiceImplTest {
         assertThat(existsPlanet).isTrue();
     }
 
-
-
-
     @Test
     void givenNotFoundPlanetNameWhenExistsPlanetByNameThenReturnFalse() {
         // given
@@ -91,6 +84,10 @@ class SwapiPlanetsServiceImplTest {
         assertThat(existsPlanet).isFalse();
     }
 
+
+    /**
+     * listAllPlanets TEST CASES
+     */
 
     @Test
     void givenPlanetsOnSinglePageWhenlistAllPlanetsThenReturnPlanets() {
@@ -121,7 +118,6 @@ class SwapiPlanetsServiceImplTest {
         assertThat(results.contains(planets.get(0))).isTrue();
         assertThat(results.contains(planets.get(1))).isTrue();
     }
-
 
     @Test
     void givenPlanetsNotFoundWhenlistAllPlanetsThenReturnEmpty() {
