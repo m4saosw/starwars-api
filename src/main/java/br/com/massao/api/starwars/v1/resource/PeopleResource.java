@@ -3,10 +3,13 @@ package br.com.massao.api.starwars.v1.resource;
 import br.com.massao.api.starwars.converter.PersonModelConverter;
 import br.com.massao.api.starwars.dto.InputPersonDto;
 import br.com.massao.api.starwars.dto.PersonDto;
+import br.com.massao.api.starwars.exception.ApiError;
 import br.com.massao.api.starwars.exception.NotFoundException;
 import br.com.massao.api.starwars.model.PersonModel;
 import br.com.massao.api.starwars.v1.service.PeopleService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,6 +36,9 @@ public class PeopleResource {
 
     @ApiOperation(value = "List all people")
     @GetMapping
+    @ApiResponses(value={
+            @ApiResponse(code=500, message="Internal Server Error. Please try again later. If persist please contact the admin")
+    })
     public Page<PersonDto> list(@PageableDefault(size = 5, sort = "id") Pageable pageRequest ) {
         log.info("list with pageable={}", pageRequest);
 
@@ -41,6 +47,11 @@ public class PeopleResource {
 
     @ApiOperation(value = "Find a person by id")
     @GetMapping("/{id}")
+    @ApiResponses(value={
+            @ApiResponse(code=404, message="Not Found"),
+            @ApiResponse(code=400, message="Bad Request", response = ApiError.class),
+            @ApiResponse(code=500, message="Internal Server Error", response = ApiError.class)
+    })
     public ResponseEntity<?> findById(@PathVariable("id") Long id) {
         log.info("findById id={}", id);
 
@@ -58,6 +69,11 @@ public class PeopleResource {
 
     @ApiOperation(value = "Create a person")
     @PostMapping
+    @ApiResponses(value={
+            @ApiResponse(code=201, message="Created"),
+            @ApiResponse(code=400, message="Bad Request", response = ApiError.class),
+            @ApiResponse(code=500, message="Internal Server Error", response = ApiError.class)
+    })
     public ResponseEntity<?> create(@Valid @RequestBody InputPersonDto person, UriComponentsBuilder uriBuilder) {
         log.info("create person={}", person);
 
@@ -74,6 +90,13 @@ public class PeopleResource {
 
     @ApiOperation(value = "Delete a person")
     @DeleteMapping("/{id}")
+    @ApiResponses(value={
+            @ApiResponse(code=204, message="Successfully Deleted"),
+            @ApiResponse(code=401, message="Unauthorized. Operation permitted only for ADMIN"),
+            @ApiResponse(code=403, message="Access Denied. Please authenticate first to get a valid token"),
+            @ApiResponse(code=404, message="Not Found"),
+            @ApiResponse(code=500, message="Internal Server Error", response = ApiError.class)
+    })
     public ResponseEntity<?> deleteById(@PathVariable("id") Long id) {
         log.info("deleteById id={}", id);
 
@@ -88,6 +111,12 @@ public class PeopleResource {
 
     @ApiOperation(value = "Update a person")
     @PutMapping("/{id}")
+    @ApiResponses(value={
+            @ApiResponse(code=200, message="Successfully Updated"),
+            @ApiResponse(code=400, message="Bad Request", response = ApiError.class),
+            @ApiResponse(code=404, message="Not Found"),
+            @ApiResponse(code=500, message="Internal Server Error", response = ApiError.class)
+    })
     public ResponseEntity<?> update(@PathVariable("id") Long id, @Valid @RequestBody InputPersonDto person) {
         log.info("modify id={} person={}", id, person);
 
@@ -104,6 +133,13 @@ public class PeopleResource {
 
     @ApiOperation(value = "Create many people")
     @PostMapping("/create-many")
+    @ApiResponses(value={
+            @ApiResponse(code=201, message="Created"),
+            @ApiResponse(code=400, message="Bad Request", response = ApiError.class),
+            @ApiResponse(code=401, message="Unauthorized. Operation permitted only for ADMIN"),
+            @ApiResponse(code=403, message="Access Denied. Please authenticate first to get a valid token"),
+            @ApiResponse(code=500, message="Internal Server Error", response = ApiError.class)
+    })
     public ResponseEntity<?> createMany(@Valid @RequestBody List<InputPersonDto> people, UriComponentsBuilder uriBuilder) {
         log.info("createMany people={}", people);
 
