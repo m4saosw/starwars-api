@@ -33,6 +33,7 @@ public class AuthenticationResource {
 	@ApiOperation(value = "Generate an authentication token", notes = "Insert a generated token into a protected resource")
 	@PostMapping
 	@ApiResponses(value={
+			@ApiResponse(code=200, message="Success", response = TokenDto.class),
 			@ApiResponse(code=400, message="Bad Request"),
 			@ApiResponse(code=500, message="Internal Server Error")
 	})
