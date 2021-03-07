@@ -1,8 +1,7 @@
 package br.com.massao.api.starwars.security.resource;
 
-import br.com.massao.api.starwars.exception.ApiError;
 import br.com.massao.api.starwars.security.config.TokenService;
-import br.com.massao.api.starwars.security.dto.TokenDto;
+import br.com.massao.api.starwars.security.dto.Token;
 import br.com.massao.api.starwars.security.form.LoginForm;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -33,18 +32,18 @@ public class AuthenticationResource {
 	@ApiOperation(value = "Generate an authentication token", notes = "Insert a generated token into a protected resource")
 	@PostMapping
 	@ApiResponses(value={
-			@ApiResponse(code=200, message="Success", response = TokenDto.class),
+			@ApiResponse(code=200, message="Success", response = Token.class),
 			@ApiResponse(code=400, message="Bad Request"),
 			@ApiResponse(code=500, message="Internal Server Error")
 	})
-	public ResponseEntity<TokenDto> authenticate(@RequestBody @Valid LoginForm form) {
+	public ResponseEntity<Token> authenticate(@RequestBody @Valid LoginForm form) {
 		UsernamePasswordAuthenticationToken loginData = form.converter();
 		
 		try {
 			Authentication authentication = authManager.authenticate(loginData);
 			String token = tokenService.tokenFrom(authentication);
 
-			return ResponseEntity.ok(new TokenDto(token, "Bearer"));
+			return ResponseEntity.ok(new Token(token, "Bearer"));
 
 		} catch (AuthenticationException e) {
 			return ResponseEntity.badRequest().build();

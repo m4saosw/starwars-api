@@ -1,8 +1,8 @@
 package br.com.massao.api.starwars.v1.resource;
 
 import br.com.massao.api.starwars.converter.PersonModelConverter;
-import br.com.massao.api.starwars.dto.InputPersonDto;
-import br.com.massao.api.starwars.dto.PersonDto;
+import br.com.massao.api.starwars.dto.InputPerson;
+import br.com.massao.api.starwars.dto.Person;
 import br.com.massao.api.starwars.exception.ApiError;
 import br.com.massao.api.starwars.exception.NotFoundException;
 import br.com.massao.api.starwars.model.PersonModel;
@@ -39,10 +39,10 @@ public class PeopleResource {
     @ApiResponses(value={
             @ApiResponse(code=500, message="Internal Server Error")
     })
-    public Page<PersonDto> list(@PageableDefault(size = 5, sort = "id") Pageable pageRequest ) {
+    public Page<Person> list(@PageableDefault(size = 5, sort = "id") Pageable pageRequest ) {
         log.info("list with pageable={}", pageRequest);
 
-        return new PersonDto().listPersonDtoFrom(peopleService.list(pageRequest));
+        return new Person().listPersonFrom(peopleService.list(pageRequest));
     }
 
     @ApiOperation(value = "Find a person by id")
@@ -64,7 +64,7 @@ public class PeopleResource {
 
 
         // nota: ResponseEntity usando retorno tradicional
-        return new ResponseEntity<>(new PersonDto(person.get()), HttpStatus.OK);
+        return new ResponseEntity<>(new Person(person.get()), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Create a person")
@@ -74,7 +74,7 @@ public class PeopleResource {
             @ApiResponse(code=400, message="Bad Request", response = ApiError.class),
             @ApiResponse(code=500, message="Internal Server Error", response = ApiError.class)
     })
-    public ResponseEntity<?> create(@Valid @RequestBody InputPersonDto person, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<?> create(@Valid @RequestBody InputPerson person, UriComponentsBuilder uriBuilder) {
         log.info("create person={}", person);
 
         PersonModel personModel = converter.modelFrom(person);
@@ -117,14 +117,14 @@ public class PeopleResource {
             @ApiResponse(code=404, message="Not Found"),
             @ApiResponse(code=500, message="Internal Server Error", response = ApiError.class)
     })
-    public ResponseEntity<?> update(@PathVariable("id") Long id, @Valid @RequestBody InputPersonDto person) {
+    public ResponseEntity<?> update(@PathVariable("id") Long id, @Valid @RequestBody InputPerson person) {
         log.info("modify id={} person={}", id, person);
 
         try {
             PersonModel model = converter.modelFrom(person);
             Optional<PersonModel> modified = peopleService.update(id, model);
 
-            return ResponseEntity.ok().body(new PersonDto(modified.get()));
+            return ResponseEntity.ok().body(new Person(modified.get()));
 
         } catch (NotFoundException e) {
             return ResponseEntity.notFound().build();
@@ -139,14 +139,14 @@ public class PeopleResource {
             @ApiResponse(code=403, message="Access Denied. Please authenticate first to get a valid token. Only ADMIN role is permitted."),
             @ApiResponse(code=500, message="Internal Server Error", response = ApiError.class)
     })
-    public ResponseEntity<?> createMany(@Valid @RequestBody List<InputPersonDto> people, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<?> createMany(@Valid @RequestBody List<InputPerson> people, UriComponentsBuilder uriBuilder) {
         log.info("createMany people={}", people);
 
         List<PersonModel> listModel = converter.listModelFrom(people);
 
         List<PersonModel> entities = peopleService.saveMany(listModel);
 
-        List<PersonDto> result = new PersonDto().listPersonDtoFrom(entities);
+        List<Person> result = new Person().listPersonFrom(entities);
 
         // Points to the list uri
         URI uri = uriBuilder.path("/people").build().toUri();

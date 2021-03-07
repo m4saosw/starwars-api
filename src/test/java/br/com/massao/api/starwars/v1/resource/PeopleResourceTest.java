@@ -1,7 +1,7 @@
 package br.com.massao.api.starwars.v1.resource;
 
 import br.com.massao.api.starwars.StartWarsApiApplication;
-import br.com.massao.api.starwars.dto.PersonDto;
+import br.com.massao.api.starwars.dto.Person;
 import br.com.massao.api.starwars.exception.NotFoundException;
 import br.com.massao.api.starwars.model.PersonModel;
 import br.com.massao.api.starwars.v1.service.PeopleService;
@@ -161,7 +161,7 @@ public class PeopleResourceTest {
 
         // then
         //String location = String.format("starwars-api/v1/people/%s", person1.getId());
-        String jsonObject = asJsonString(new PersonDto(person1));
+        String jsonObject = asJsonString(new Person(person1));
 
         mvc.perform(post("/v1/people")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -181,7 +181,7 @@ public class PeopleResourceTest {
         given(peopleService.save(any(PersonModel.class))).willReturn(person1);
 
         // then
-        String jsonObject = asJsonString(new PersonDto(person1));
+        String jsonObject = asJsonString(new Person(person1));
 
         mvc.perform(post("/v1/people")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -241,7 +241,7 @@ public class PeopleResourceTest {
         Mockito.when(peopleService.update(anyLong(), any())).thenThrow(NotFoundException.class);
 
         // then
-        String jsonObject = asJsonString(new PersonDto(person1));
+        String jsonObject = asJsonString(new Person(person1));
         mvc.perform(put("/v1/people/{id}", 1L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonObject))
@@ -260,7 +260,7 @@ public class PeopleResourceTest {
         given(peopleService.update(anyLong(), any())).willReturn(Optional.of(person2));
 
         // then
-        String jsonObject = asJsonString(new PersonDto(person2));
+        String jsonObject = asJsonString(new Person(person2));
         mvc.perform(put("/v1/people/{id}", person1.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonObject))

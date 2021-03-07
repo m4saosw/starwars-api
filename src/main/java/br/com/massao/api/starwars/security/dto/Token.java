@@ -2,7 +2,7 @@ package br.com.massao.api.starwars.security.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class TokenDto {
+public class Token {
 
 	@JsonProperty("token")
 	private String token;
@@ -10,7 +10,7 @@ public class TokenDto {
 	@JsonProperty("type")
 	private String type;
 
-	public TokenDto(String token, String type) {
+	public Token(String token, String type) {
 		this.token = token;
 		this.type = type;
 	}

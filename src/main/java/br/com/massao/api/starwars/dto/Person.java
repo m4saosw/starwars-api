@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Builder
-public class PersonDto {
+public class Person {
     @JsonProperty("id")
     private Long id;
 
@@ -53,7 +53,7 @@ public class PersonDto {
     @JsonProperty("filmsExhibitions")
     private int filmsExhibitions; // TODO - query
 
-    public PersonDto(PersonModel model) {
+    public Person(PersonModel model) {
         this.id = model.getId();
         this.name = model.getName();
         this.height = model.getHeight();
@@ -68,8 +68,8 @@ public class PersonDto {
      * @param people
      * @return
      */
-    public List<PersonDto> listPersonDtoFrom(List<PersonModel> people) {
-        return people.stream().map(model -> new PersonDto(model)).collect(Collectors.toList());
+    public List<Person> listPersonFrom(List<PersonModel> people) {
+        return people.stream().map(model -> new Person(model)).collect(Collectors.toList());
     }
 
 
@@ -78,7 +78,7 @@ public class PersonDto {
      * @param people
      * @return
      */
-    public Page<PersonDto> listPersonDtoFrom(Page<PersonModel> people) {
-        return people.map(person -> new PersonDto(person));
+    public Page<Person> listPersonFrom(Page<PersonModel> people) {
+        return people.map(person -> new Person(person));
     }
 }

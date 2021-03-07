@@ -8,7 +8,7 @@ import lombok.ToString;
 
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PlanetDto {
+public class Planet {
 
     @JsonProperty("name")
     private String name;
@@ -24,7 +24,7 @@ public class PlanetDto {
         this.name = name;
     }
 
-    public PlanetDto(PlanetSwapiResult planet) {
+    public Planet(PlanetSwapiResult planet) {
         this.name = planet.getName();
     }
 }

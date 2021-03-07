@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Builder
-public class InputPersonDto {
+public class InputPerson {
     @JsonProperty("name")
     @NotNull
     @NotEmpty
