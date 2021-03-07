@@ -152,6 +152,7 @@ public class PeopleResourceTest {
      */
 
     @Test
+    @WithMockUser(value = "user1", password = "123456", authorities = "ROLE_USER")
     public void givenPersonWhenCreatePersonThenReturnLocationWithStatus201() throws Exception {
         // given
         PersonModel person1 = PersonModel.builder().id(1L).birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
@@ -173,6 +174,7 @@ public class PeopleResourceTest {
     }
 
     @Test
+    @WithMockUser(value = "user1", password = "123456", authorities = "ROLE_USER")
     public void givenInvalidPersonWhenCreatePersonThenReturnStatus400() throws Exception {
         // given
         PersonModel person1 = PersonModel.builder().build();
