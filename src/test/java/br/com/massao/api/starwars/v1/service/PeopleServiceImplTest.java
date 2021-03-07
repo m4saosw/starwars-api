@@ -29,7 +29,7 @@ import static org.mockito.Mockito.verify;
 
 
 @ExtendWith(SpringExtension.class)
-public class PeopleServiceTest {
+public class PeopleServiceImplTest {
     @Autowired
     private PeopleService peopleService;
 
