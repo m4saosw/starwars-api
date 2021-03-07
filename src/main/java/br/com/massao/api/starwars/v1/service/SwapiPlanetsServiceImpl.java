@@ -32,6 +32,11 @@ public class SwapiPlanetsServiceImpl implements SwapiPlanetsService {
     private SwapiPlanetsServiceImpl self;
 
 
+    /**
+     * Exists a planet with exact name
+     * @param name
+     * @return
+     */
     @Cacheable(value = "planet")
     @Override
     public boolean existsPlanetByName(String name) {
@@ -45,6 +50,10 @@ public class SwapiPlanetsServiceImpl implements SwapiPlanetsService {
     }
 
 
+    /**
+     * List all planets
+     * @return
+     */
     // TODO - adicionar busca resiliente, permitindo retorno parcial de sucesso
     // TODO - adicionar informacoes no log em caso de retorno parcial
     // TODO - refatorar

@@ -28,16 +28,21 @@ import java.util.Optional;
 @Slf4j
 @RestController
 @RequestMapping("v1/people")
-// TODO - usar interfaces
 public class PeopleResource {
     @Autowired
     private PeopleService peopleService;
     private PersonModelConverter converter = new PersonModelConverter();
 
+
+    /**
+     * List all people
+     * @param pageRequest
+     * @return
+     */
     @ApiOperation(value = "List all people")
     @GetMapping
     @ApiResponses(value={
-            @ApiResponse(code=500, message="Internal Server Error")
+            @ApiResponse(code=500, message="Internal Server Error", response = ApiError.class)
     })
     public Page<Person> list(@PageableDefault(size = 5, sort = "id") Pageable pageRequest ) {
         log.info("list with pageable={}", pageRequest);
@@ -45,6 +50,11 @@ public class PeopleResource {
         return new Person().listPersonFrom(peopleService.list(pageRequest));
     }
 
+    /**
+     * Find a person by id
+     * @param id
+     * @return
+     */
     @ApiOperation(value = "Find a person by id")
     @GetMapping("/{id}")
     @ApiResponses(value={
@@ -62,11 +72,16 @@ public class PeopleResource {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-
         // nota: ResponseEntity usando retorno tradicional
         return new ResponseEntity<>(new Person(person.get()), HttpStatus.OK);
     }
 
+    /**
+     * Create a person
+     * @param person
+     * @param uriBuilder
+     * @return
+     */
     @ApiOperation(value = "Create a person")
     @PostMapping
     @ApiResponses(value={
@@ -88,7 +103,11 @@ public class PeopleResource {
         return ResponseEntity.created(uri).build();
     }
 
-
+    /**
+     * Delete a person
+     * @param id
+     * @return
+     */
     @ApiOperation(value = "Delete a person")
     @DeleteMapping("/{id}")
     @ApiResponses(value={
@@ -109,6 +128,12 @@ public class PeopleResource {
         }
     }
 
+    /**
+     * Update a person
+     * @param id
+     * @param person
+     * @return
+     */
     @ApiOperation(value = "Update a person")
     @PutMapping("/{id}")
     @ApiResponses(value={
@@ -132,6 +157,12 @@ public class PeopleResource {
         }
     }
 
+    /**
+     * Create many people
+     * @param people
+     * @param uriBuilder
+     * @return
+     */
     @ApiOperation(value = "Create many people")
     @PostMapping("/create-many")
     @ApiResponses(value={

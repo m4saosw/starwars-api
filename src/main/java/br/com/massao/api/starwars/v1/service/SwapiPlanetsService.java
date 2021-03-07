@@ -7,7 +7,16 @@ import java.util.List;
 
 @Service
 public interface SwapiPlanetsService {
+    /**
+     * Exists a planet with exact name
+     * @param name
+     * @return
+     */
     boolean existsPlanetByName(String name);
 
+    /**
+     * List all planets
+     * @return
+     */
     List<PlanetSwapiResult> listAllPlanets();
 }

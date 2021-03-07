@@ -29,6 +29,11 @@ public class AuthenticationResource {
 	@Autowired
 	private TokenService tokenService;
 
+	/**
+	 * Generate an authentication token
+	 * @param form
+	 * @return
+	 */
 	@ApiOperation(value = "Generate an authentication token", notes = "Insert a generated token into a protected resource")
 	@PostMapping
 	@ApiResponses(value={

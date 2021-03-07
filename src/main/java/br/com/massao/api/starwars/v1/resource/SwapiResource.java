@@ -24,7 +24,10 @@ public class SwapiResource {
     @Autowired
     private SwapiPlanetsService service;
 
-
+    /**
+     * List all planets
+     * @return
+     */
     @ApiOperation(value = "List all planets", notes = "This operation gets all planets from swapi API. Use a planet of this list into homeworld field when inserting or updating a person resource")
     @GetMapping("/planets")
     @ApiResponses(value={
