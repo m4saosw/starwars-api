@@ -1,6 +1,7 @@
 package br.com.massao.api.starwars.v1.resource;
 
 import br.com.massao.api.starwars.dto.PlanetDto;
+import br.com.massao.api.starwars.exception.ApiError;
 import br.com.massao.api.starwars.v1.service.SwapiPlanetsService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -27,7 +28,7 @@ public class SwapiResource {
     @ApiOperation(value = "List all planets", notes = "This operation gets all planets from swapi API. Use a planet of this list into homeworld field when inserting or updating a person resource")
     @GetMapping("/planets")
     @ApiResponses(value={
-            @ApiResponse(code=500, message="Internal Server Error")
+            @ApiResponse(code=500, message="Internal Server Error", response = ApiError.class)
     })
     public List<PlanetDto> listAllPlanets() {
         Instant start = Instant.now();
