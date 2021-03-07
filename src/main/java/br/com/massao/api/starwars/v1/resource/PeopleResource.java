@@ -92,8 +92,7 @@ public class PeopleResource {
     @DeleteMapping("/{id}")
     @ApiResponses(value={
             @ApiResponse(code=204, message="Successfully Deleted"),
-            @ApiResponse(code=401, message="Unauthorized. Operation permitted only for ADMIN"),
-            @ApiResponse(code=403, message="Access Denied. Please authenticate first to get a valid token"),
+            @ApiResponse(code=403, message="Access Denied. Please authenticate first to get a valid token. Only ADMIN role is permitted."),
             @ApiResponse(code=404, message="Not Found"),
             @ApiResponse(code=500, message="Internal Server Error", response = ApiError.class)
     })
@@ -114,6 +113,7 @@ public class PeopleResource {
     @ApiResponses(value={
             @ApiResponse(code=200, message="Successfully Updated"),
             @ApiResponse(code=400, message="Bad Request", response = ApiError.class),
+            @ApiResponse(code=403, message="Access Denied. Please authenticate first to get a valid token. Only USER or ADMIN roles are permitted."),
             @ApiResponse(code=404, message="Not Found"),
             @ApiResponse(code=500, message="Internal Server Error", response = ApiError.class)
     })
@@ -136,8 +136,7 @@ public class PeopleResource {
     @ApiResponses(value={
             @ApiResponse(code=201, message="Created"),
             @ApiResponse(code=400, message="Bad Request", response = ApiError.class),
-            @ApiResponse(code=401, message="Unauthorized. Operation permitted only for ADMIN"),
-            @ApiResponse(code=403, message="Access Denied. Please authenticate first to get a valid token"),
+            @ApiResponse(code=403, message="Access Denied. Please authenticate first to get a valid token. Only ADMIN role is permitted."),
             @ApiResponse(code=500, message="Internal Server Error", response = ApiError.class)
     })
     public ResponseEntity<?> createMany(@Valid @RequestBody List<InputPersonDto> people, UriComponentsBuilder uriBuilder) {
