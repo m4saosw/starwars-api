@@ -3,6 +3,43 @@ A little REST CRUD API that consumes Star Wars API (https://swapi.dev/).
 
 Application for study purposes.
 
+
+# Table of contents
+
+- [Introduction](#introduction)
+- [Technologies](#technologies)
+- [Compilation](#compilation)
+- [Web Interfaces](#web-interfaces)
+- [Security](#security)
+- [API Documentation - Version: 1.0](#api-documentation---version-10)
+  - [/auth](#auth)
+    - [POST](#post)
+  - [/v1/people](#v1people)
+    - [GET](#get)
+    - [POST](#post)
+  - [/v1/people/create-many](#v1peoplecreate-many)
+    - [POST](#post)
+  - [/v1/people/{id}](#v1peopleid)
+    - [GET](#get)
+    - [PUT](#put)
+    - [DELETE](#delete)
+  - [/v1/swapi/planets](#v1swapiplanets)
+    - [GET](#get)
+  - [Models](#models)
+    - [ApiError](#apierror)
+    - [ApiFieldError](#apifielderror)
+    - [InputPerson](#inputperson)
+    - [LoginForm](#loginform)
+    - [Pageable](#pageable)
+    - [Page«Person»](#pageperson)
+    - [Person](#person)
+    - [Planet](#planet)
+    - [Sort](#sort)
+    - [Token](#token)
+
+## Introduction
+
+
 ## Technologies
     Java 8
     Spring Framework (Boot, Web, Cache, Data, Security/JWT)
@@ -20,6 +57,14 @@ After start the application, you can access:
 Swagger interface - http://localhost:8080/starwars-api/swagger-ui.html
 
 Web console for H2 database - http://localhost:8080/starwars-api/h2		
+
+## Security
+There are two roles and users that can be used for restricted operations:
+
+| Role | User | Password | 
+| ---- | ---------- | ----------- |
+| ADMIN | userAdmin1 | 123456 |
+| USER | user1 | 123456 |
 
 ## API Documentation - Version: 1.0
 
