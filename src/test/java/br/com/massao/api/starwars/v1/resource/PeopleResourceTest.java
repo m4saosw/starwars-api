@@ -92,8 +92,8 @@ class PeopleResourceTest {
     @Test
     void givenPeopleWhenGetPeopleThenReturnPeopleWithStatus200() throws Exception {
         // given
-        PersonModel person1 = PersonModel.builder().id(1L).birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
-        PersonModel person2 = PersonModel.builder().id(2L).birth_year("11111").gender("female").height(123).homeworld("terra").mass(100).name("PERSON2").build();
+        PersonModel person1 = PersonModel.builder().id(1L).birthYear("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
+        PersonModel person2 = PersonModel.builder().id(2L).birthYear("11111").gender("female").height(123).homeworld("terra").mass(100).name("PERSON2").build();
         List<PersonModel> peopleModel = Arrays.asList(person1, person2);
         Page<PersonModel> peoplePageModel = new PageImpl<>(peopleModel);
 
@@ -133,7 +133,7 @@ class PeopleResourceTest {
     @Test
     void givenPersonWhenFindByIdPersonThenReturnPersonWithStatus200() throws Exception {
         // given
-        PersonModel person1 = PersonModel.builder().id(1L).birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
+        PersonModel person1 = PersonModel.builder().id(1L).birthYear("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
 
         // when
         given(peopleService.findById(person1.getId())).willReturn(Optional.of(person1));
@@ -155,7 +155,7 @@ class PeopleResourceTest {
     @WithMockUser(value = "user1", password = "123456", authorities = "ROLE_USER")
     void givenPersonWhenCreatePersonThenReturnLocationWithStatus201() throws Exception {
         // given
-        PersonModel person1 = PersonModel.builder().id(1L).birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
+        PersonModel person1 = PersonModel.builder().id(1L).birthYear("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
 
         // when
         given(peopleService.save(any(PersonModel.class))).willReturn(person1);
@@ -189,7 +189,7 @@ class PeopleResourceTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonObject))
                 .andExpect(status().isBadRequest());
-                //.andExpect(content().string("")); TODO - fazer validacao do objeto de erro retornado no body
+        //.andExpect(content().string("")); TODO - fazer validacao do objeto de erro retornado no body
     }
 
 
@@ -216,7 +216,7 @@ class PeopleResourceTest {
     @WithMockUser(value = "userAdmin1", password = "123456", authorities = "ROLE_ADMIN")
     void givenPersonWhenDeleteByIdPersonThenDeleteAndReturnStatus204() throws Exception {
         // given
-        PersonModel person1 = PersonModel.builder().id(1L).birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
+        PersonModel person1 = PersonModel.builder().id(1L).birthYear("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
 
         // when
         //given(peopleService.deleteById(person1.getId())).willReturn();
@@ -237,7 +237,7 @@ class PeopleResourceTest {
     @WithMockUser(value = "user1", password = "123456", authorities = "ROLE_USER")
     void givenNotFoundWhenUpdatePersonThenReturnStatus404() throws Exception {
         // given
-        PersonModel person1 = PersonModel.builder().id(1L).birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
+        PersonModel person1 = PersonModel.builder().id(1L).birthYear("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
 
         // when
         Mockito.when(peopleService.update(anyLong(), any())).thenThrow(NotFoundException.class);
@@ -255,8 +255,8 @@ class PeopleResourceTest {
     @WithMockUser(value = "user1", password = "123456", authorities = "ROLE_USER")
     void givenPersonWhenUpdateThenReturnPersonWithStatus200() throws Exception {
         // given
-        PersonModel person1 = PersonModel.builder().id(1L).birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
-        PersonModel person2 = PersonModel.builder().birth_year("11111").gender("female").height(123).homeworld("terra").mass(100).name("PERSON2").build();
+        PersonModel person1 = PersonModel.builder().id(1L).birthYear("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
+        PersonModel person2 = PersonModel.builder().birthYear("11111").gender("female").height(123).homeworld("terra").mass(100).name("PERSON2").build();
 
         // when
         given(peopleService.update(anyLong(), any())).willReturn(Optional.of(person2));
@@ -271,9 +271,9 @@ class PeopleResourceTest {
                 .andExpect(jsonPath("$.name").value(person2.getName()))
                 .andExpect(jsonPath("$.height").value(person2.getHeight()))
                 .andExpect(jsonPath("$.mass").value(person2.getMass()))
-                .andExpect(jsonPath("$.birth_year").value(person2.getBirth_year()))
+                .andExpect(jsonPath("$.birth_year").value(person2.getBirthYear()))
                 .andExpect(jsonPath("$.gender").value(person2.getGender()));
-                //.andExpect(jsonPath("$.homeworld").value(person2.getHomeworld()));
+        //.andExpect(jsonPath("$.homeworld").value(person2.getHomeworld()));
     }
 
 

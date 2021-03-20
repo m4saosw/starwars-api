@@ -43,8 +43,8 @@ class PeopleRepositoryIntegrationTest {
         // given
         peopleRepository.deleteAll();
 
-        PersonModel person1 = PersonModel.builder().birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
-        PersonModel person2 = PersonModel.builder().birth_year("11111").gender("female").height(123).homeworld("terra").mass(100).name("PERSON2").build();
+        PersonModel person1 = PersonModel.builder().birthYear("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
+        PersonModel person2 = PersonModel.builder().birthYear("11111").gender("female").height(123).homeworld("terra").mass(100).name("PERSON2").build();
 
         PersonModel person1Persisted = entityManager.persist(person1);
         PersonModel person2Persisted = entityManager.persist(person2);
@@ -67,8 +67,8 @@ class PeopleRepositoryIntegrationTest {
         // given
         peopleRepository.deleteAll();
 
-        PersonModel person1 = PersonModel.builder().birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
-        PersonModel person2 = PersonModel.builder().birth_year("11111").gender("female").height(123).homeworld("terra").mass(100).name("PERSON2").build();
+        PersonModel person1 = PersonModel.builder().birthYear("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
+        PersonModel person2 = PersonModel.builder().birthYear("11111").gender("female").height(123).homeworld("terra").mass(100).name("PERSON2").build();
 
         Long idGenerated1 = (Long) entityManager.persistAndGetId(person1);
         entityManager.flush();
@@ -84,7 +84,7 @@ class PeopleRepositoryIntegrationTest {
     @Test
     void givenPersonWhenCreateThenSave() {
         // given
-        PersonModel person1 = PersonModel.builder().birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
+        PersonModel person1 = PersonModel.builder().birthYear("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
 
         // when
         PersonModel personFound = peopleRepository.saveAndFlush(person1);
@@ -111,8 +111,8 @@ class PeopleRepositoryIntegrationTest {
         // given
         peopleRepository.deleteAll();
 
-        PersonModel person1 = PersonModel.builder().birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
-        PersonModel person2 = PersonModel.builder().birth_year("11111").gender("female").height(123).homeworld("terra").mass(100).name("PERSON2").build();
+        PersonModel person1 = PersonModel.builder().birthYear("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
+        PersonModel person2 = PersonModel.builder().birthYear("11111").gender("female").height(123).homeworld("terra").mass(100).name("PERSON2").build();
 
         Long idGenerated1 = (Long) entityManager.persistAndGetId(person1);
         Long idGenerated2 = (Long) entityManager.persistAndGetId(person2);
@@ -145,8 +145,8 @@ class PeopleRepositoryIntegrationTest {
         // given
         peopleRepository.deleteAll();
 
-        PersonModel person1 = PersonModel.builder().birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
-        PersonModel person2 = PersonModel.builder().birth_year("11111").gender("female").height(123).homeworld("terra").mass(100).name("PERSON2").build();
+        PersonModel person1 = PersonModel.builder().birthYear("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
+        PersonModel person2 = PersonModel.builder().birthYear("11111").gender("female").height(123).homeworld("terra").mass(100).name("PERSON2").build();
 
         Long idGenerated1 = (Long) entityManager.persistAndGetId(person1);
         entityManager.flush();
@@ -158,7 +158,7 @@ class PeopleRepositoryIntegrationTest {
         person.setMass(person2.getMass());
         person.setHeight(person2.getHeight());
         person.setGender(person2.getGender());
-        person.setBirth_year(person2.getBirth_year());
+        person.setBirthYear(person2.getBirthYear());
 
         peopleRepository.save(person);
 
@@ -171,7 +171,7 @@ class PeopleRepositoryIntegrationTest {
         assertThat(model.getMass()).isEqualTo(person2.getMass());
         assertThat(model.getHeight()).isEqualTo(person2.getHeight());
         assertThat(model.getGender()).isEqualTo(person2.getGender());
-        assertThat(model.getBirth_year()).isEqualTo(person2.getBirth_year());
+        assertThat(model.getBirthYear()).isEqualTo(person2.getBirthYear());
     }
 
 }
