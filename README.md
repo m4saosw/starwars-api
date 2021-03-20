@@ -1,5 +1,6 @@
 # My Star Wars API
 [![Build](https://github.com/m4saosw/starwars-api/actions/workflows/build.yml/badge.svg)](https://github.com/m4saosw/starwars-api/actions/workflows/build.yml)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=m4saosw_starwars-api&metric=coverage)](https://sonarcloud.io/dashboard?id=m4saosw_starwars-api)
 
 A little REST CRUD API that consumes Star Wars API (https://swapi.dev/).
 
