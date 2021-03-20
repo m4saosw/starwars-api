@@ -62,10 +62,10 @@ public class PeopleResource {
             @ApiResponse(code=400, message="Bad Request", response = ApiError.class),
             @ApiResponse(code=500, message="Internal Server Error", response = ApiError.class)
     })
-    public ResponseEntity<?> findById(@PathVariable("id") Long id) {
+    public ResponseEntity<Person> findById(@PathVariable("id") Long id) {
         log.info("findById id={}", id);
 
-        Optional<PersonModel> person = null;
+        Optional<PersonModel> person;
         try {
             person = peopleService.findById(id);
         } catch (NotFoundException e) {
@@ -90,7 +90,7 @@ public class PeopleResource {
             @ApiResponse(code=403, message="Access Denied. Please authenticate first to get a valid token. Only USER or ADMIN roles are permitted."),
             @ApiResponse(code=500, message="Internal Server Error", response = ApiError.class)
     })
-    public ResponseEntity<?> create(@Valid @RequestBody InputPerson person, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<Void> create(@Valid @RequestBody InputPerson person, UriComponentsBuilder uriBuilder) {
         log.info("create person={}", person);
 
         PersonModel personModel = converter.modelFrom(person);
@@ -116,7 +116,7 @@ public class PeopleResource {
             @ApiResponse(code=404, message="Not Found"),
             @ApiResponse(code=500, message="Internal Server Error", response = ApiError.class)
     })
-    public ResponseEntity<?> deleteById(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteById(@PathVariable("id") Long id) {
         log.info("deleteById id={}", id);
 
         try {
@@ -143,7 +143,7 @@ public class PeopleResource {
             @ApiResponse(code=404, message="Not Found"),
             @ApiResponse(code=500, message="Internal Server Error", response = ApiError.class)
     })
-    public ResponseEntity<?> update(@PathVariable("id") Long id, @Valid @RequestBody InputPerson person) {
+    public ResponseEntity<Person> update(@PathVariable("id") Long id, @Valid @RequestBody InputPerson person) {
         log.info("modify id={} person={}", id, person);
 
         try {
@@ -171,7 +171,7 @@ public class PeopleResource {
             @ApiResponse(code=403, message="Access Denied. Please authenticate first to get a valid token. Only ADMIN role is permitted."),
             @ApiResponse(code=500, message="Internal Server Error", response = ApiError.class)
     })
-    public ResponseEntity<?> createMany(@Valid @RequestBody List<InputPerson> people, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<List<Person>> createMany(@Valid @RequestBody List<InputPerson> people, UriComponentsBuilder uriBuilder) {
         log.info("createMany people={}", people);
 
         List<PersonModel> listModel = converter.listModelFrom(people);

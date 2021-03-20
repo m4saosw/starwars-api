@@ -1,16 +1,12 @@
 package br.com.massao.api.starwars.dto;
 
-import br.com.massao.api.starwars.model.PersonModel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-import org.springframework.data.domain.Page;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @NoArgsConstructor // Used by Jackson
 @AllArgsConstructor
@@ -35,7 +31,7 @@ public class InputPerson {
     @JsonProperty("birth_year")
     @NotNull
     @NotEmpty
-    private String birth_year;
+    private String birthYear;
 
     @JsonProperty("gender")
     @NotNull

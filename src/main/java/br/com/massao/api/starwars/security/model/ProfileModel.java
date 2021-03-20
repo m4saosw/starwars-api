@@ -7,12 +7,12 @@ import javax.persistence.*;
 @Entity(name = "Profile")
 @Table(name="profile")
 public class ProfileModel implements GrantedAuthority {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	private String name;
 
 	public Long getId() {
@@ -33,7 +33,7 @@ public class ProfileModel implements GrantedAuthority {
 
 	@Override
 	public String getAuthority() {
-		return name;
+		return getName();
 	}
-	
+
 }

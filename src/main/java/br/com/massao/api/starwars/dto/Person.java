@@ -38,7 +38,7 @@ public class Person {
     @JsonProperty("birth_year")
     @NotNull
     @NotEmpty
-    private String birth_year;
+    private String birthYear;
 
     @JsonProperty("gender")
     @NotNull
@@ -58,7 +58,7 @@ public class Person {
         this.name = model.getName();
         this.height = model.getHeight();
         this.mass = model.getMass();
-        this.birth_year = model.getBirth_year();
+        this.birthYear = model.getBirthYear();
         this.gender = model.getGender();
         this.homeworld = model.getHomeworld(); // TODO - query
     }
@@ -69,7 +69,7 @@ public class Person {
      * @return
      */
     public List<Person> listPersonFrom(List<PersonModel> people) {
-        return people.stream().map(model -> new Person(model)).collect(Collectors.toList());
+        return people.stream().map(Person::new).collect(Collectors.toList());
     }
 
 
@@ -79,6 +79,6 @@ public class Person {
      * @return
      */
     public Page<Person> listPersonFrom(Page<PersonModel> people) {
-        return people.map(person -> new Person(person));
+        return people.map(Person::new);
     }
 }

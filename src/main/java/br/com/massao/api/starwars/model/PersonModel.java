@@ -38,7 +38,7 @@ public class PersonModel {
     @Column(name = "birth_year")
     @NotNull
     @NotEmpty
-    private String birth_year;
+    private String birthYear;
 
     @Column(name = "gender")
     @NotNull

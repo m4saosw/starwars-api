@@ -41,7 +41,7 @@ public class PeopleServiceImpl implements PeopleService {
      *
      * @return
      */
-    // TODO - @Cacheable(key = "people")  Nao sera cacheado pois a area de negoco indicou que a lista de pessoas mudara constantemente, teoricamente inviabilizaria a performance do cache
+    // @Cacheable(key = "people")  Nao sera cacheado pois a area de negocio indicou que a lista de pessoas mudara constantemente, teoricamente inviabilizaria a performance do cache
     @Override
     public List<PersonModel> list() {
         log.debug("list");
@@ -96,8 +96,7 @@ public class PeopleServiceImpl implements PeopleService {
             throw new IllegalArgumentException("Homeworld is not a valid Planet in StarWars API");
         log.debug("save - existsPlanetByName planet={} elapsedTime={} ms", person.getHomeworld(), Duration.between(instant, Instant.now()).toMillis());
 
-        PersonModel save = repository.save(person);
-        return save;
+        return repository.save(person);
     }
 
     /**
@@ -133,7 +132,7 @@ public class PeopleServiceImpl implements PeopleService {
 
         // Updates current person
         person.get().setName(newPerson.getName());
-        person.get().setBirth_year(newPerson.getBirth_year());
+        person.get().setBirthYear(newPerson.getBirthYear());
         person.get().setGender(newPerson.getGender());
         person.get().setHeight((newPerson.getHeight()));
         person.get().setMass((newPerson.getMass()));
@@ -171,14 +170,6 @@ public class PeopleServiceImpl implements PeopleService {
             log.debug("save - existsPlanetByName planet={} elapsedTime={} ms", person.getHomeworld(), Duration.between(instant, Instant.now()).toMillis());
         }
 
-        List<PersonModel> results = repository.saveAll(people);
-
-//        List<PersonModel> results = new ArrayList<>();
-//        for (PersonModel person : people) {
-//            results.add(repository.save(person));
-//        }
-//        // repository.saveAll(people);
-
-        return results;
+        return repository.saveAll(people);
     }
 }

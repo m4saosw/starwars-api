@@ -19,7 +19,7 @@ public class PersonModelConverter {
                 .name(person.getName())
                 .height(person.getHeight())
                 .mass(person.getMass())
-                .birth_year(person.getBirth_year())
+                .birthYear(person.getBirthYear())
                 .gender(person.getGender())
                 .homeworld(person.getHomeworld())
                 .build();

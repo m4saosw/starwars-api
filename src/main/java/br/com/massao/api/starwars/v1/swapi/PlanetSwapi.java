@@ -11,10 +11,10 @@ import java.util.Map;
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "count",
-    "next",
-    "previous",
-    "results"
+        "count",
+        "next",
+        "previous",
+        "results"
 })
 public class PlanetSwapi {
 
@@ -27,7 +27,7 @@ public class PlanetSwapi {
     @JsonProperty("results")
     private List<PlanetSwapiResult> results = null;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonProperty("count")
     public Integer getCount() {

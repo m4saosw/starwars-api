@@ -26,12 +26,13 @@ public class SwapiResource {
 
     /**
      * List all planets
+     *
      * @return
      */
     @ApiOperation(value = "List all planets", notes = "This operation gets all planets from swapi API. Use a planet of this list into homeworld field when inserting or updating a person resource")
     @GetMapping("/planets")
-    @ApiResponses(value={
-            @ApiResponse(code=500, message="Internal Server Error", response = ApiError.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 500, message = "Internal Server Error", response = ApiError.class)
     })
     public List<Planet> listAllPlanets() {
         Instant start = Instant.now();
@@ -39,10 +40,9 @@ public class SwapiResource {
 
         List<Planet> planets = new ArrayList<>();
 
-        // TODO - refactor
-        service.listAllPlanets().forEach(planet -> {
-            planets.add(new Planet(planet));
-        });
+        service.listAllPlanets().forEach(planet ->
+                planets.add(new Planet(planet))
+        );
 
         log.debug("listAllPlanets results={} resultsSize={} elapsedTime={} ms", planets, planets.size(), Duration.between(start, Instant.now()).toMillis());
         return planets;
