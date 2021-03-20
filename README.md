@@ -1,4 +1,6 @@
 # My Star Wars API
+[![Build](https://github.com/m4saosw/starwars-api/actions/workflows/build.yml/badge.svg)](https://github.com/m4saosw/starwars-api/actions/workflows/build.yml)
+
 A little REST CRUD API that consumes Star Wars API (https://swapi.dev/).
 
 Application for study purposes.
