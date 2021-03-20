@@ -1,7 +1,6 @@
 package br.com.massao.api.starwars.v1.repository;
 
 
-import br.com.massao.api.starwars.exception.NotFoundException;
 import br.com.massao.api.starwars.model.PersonModel;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +15,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyLong;
 
 
 /**
@@ -79,7 +77,7 @@ class PeopleRepositoryIntegrationTest {
         Optional<PersonModel> personFound = peopleRepository.findById(idGenerated1);
 
         // then
-        assertThat(personFound.isPresent()).isTrue();
+        assertThat(personFound).isPresent();
         assertThat(personFound.get().getId()).isEqualTo(idGenerated1);
     }
 
@@ -92,8 +90,9 @@ class PeopleRepositoryIntegrationTest {
         PersonModel personFound = peopleRepository.saveAndFlush(person1);
 
         // then
-        assertThat(personFound).isNotNull();
-        assertThat(personFound).isEqualTo(person1);
+        assertThat(personFound)
+                .isNotNull()
+                .isEqualTo(person1);
     }
 
     @Test
@@ -124,7 +123,7 @@ class PeopleRepositoryIntegrationTest {
         peopleRepository.deleteById(idGenerated1);
 
         // then
-        assertThat(peopleRepository.findById(idGenerated1).isPresent()).isFalse();
+        assertThat(peopleRepository.findById(idGenerated1)).isNotPresent();
         assertThat(peopleRepository.count()).isEqualTo(totalOfRecords - 1);
     }
 

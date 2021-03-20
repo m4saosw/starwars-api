@@ -83,7 +83,7 @@ class PeopleServiceImplTest {
 
         // then
         assertThat(peopleResult).isNotNull();
-        assertThat(peopleResult.size()).isEqualTo(0);
+        assertThat(peopleResult.size()).isZero();
     }
 
 
@@ -103,8 +103,9 @@ class PeopleServiceImplTest {
         Optional<PersonModel> peopleResult = peopleService.findById(person1.getId());
 
         // then
-        assertThat(peopleResult.isPresent()).isTrue();
-        assertThat(peopleResult.get()).isEqualTo(person1);
+        assertThat(peopleResult)
+                .isPresent()
+                .contains(person1);
     }
 
     @Test()
@@ -135,8 +136,9 @@ class PeopleServiceImplTest {
         PersonModel personResult = peopleService.save(person1);
 
         // then
-        assertThat(personResult).isNotNull();
-        assertThat(personResult).isEqualTo(person1);
+        assertThat(personResult)
+                .isNotNull()
+                .isEqualTo(person1);
     }
 
     @Test
