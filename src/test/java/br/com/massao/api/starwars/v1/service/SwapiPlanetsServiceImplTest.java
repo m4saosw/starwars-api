@@ -153,7 +153,7 @@ class SwapiPlanetsServiceImplTest {
     @TestConfiguration
     static class SwapiPlanetsServiceImplTestContextConfiguration {
         @Bean
-        public SwapiPlanetsService swapiPlanetsService() {
+        SwapiPlanetsService swapiPlanetsService() {
             return new SwapiPlanetsServiceImpl();
         }
 

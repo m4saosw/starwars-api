@@ -29,7 +29,7 @@ import static org.mockito.Mockito.verify;
 
 
 @ExtendWith(SpringExtension.class)
-public class PeopleServiceImplTest {
+class PeopleServiceImplTest {
     @Autowired
     private PeopleService peopleService;
 
@@ -41,7 +41,7 @@ public class PeopleServiceImplTest {
 
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         Mockito.when(planetsService.existsPlanetByName(any())).thenReturn(true);
     }
 
@@ -50,7 +50,7 @@ public class PeopleServiceImplTest {
      */
 
     @Test
-    public void givenPeopleWhenListThenReturnPeople() {
+    void givenPeopleWhenListThenReturnPeople() {
         // given
         PersonModel person1 = PersonModel.builder().id(1L).birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
         PersonModel person2 = PersonModel.builder().id(2L).birth_year("11111").gender("female").height(123).homeworld("terra").mass(100).name("PERSON2").build();
@@ -71,7 +71,7 @@ public class PeopleServiceImplTest {
     }
 
     @Test
-    public void givenEmptyWhenListThenReturnEmpty() {
+    void givenEmptyWhenListThenReturnEmpty() {
         // given
         List<PersonModel> peopleModel = Arrays.asList();
 
@@ -92,7 +92,7 @@ public class PeopleServiceImplTest {
      */
 
     @Test
-    public void givenPersonWhenFindByIdThenReturnPerson() throws NotFoundException {
+    void givenPersonWhenFindByIdThenReturnPerson() throws NotFoundException {
         // given
         PersonModel person1 = PersonModel.builder().id(1L).birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
 
@@ -108,7 +108,7 @@ public class PeopleServiceImplTest {
     }
 
     @Test()
-    public void givenNotFoundWhenFindByIdThenThrowsNotFoundException() {
+    void givenNotFoundWhenFindByIdThenThrowsNotFoundException() {
         // given
         // prepares mock
         Mockito.when(peopleRepository.findById(anyLong())).thenReturn(Optional.empty());
@@ -124,7 +124,7 @@ public class PeopleServiceImplTest {
      */
 
     @Test
-    public void givenPersonWhenCreateThenReturnPerson() {
+    void givenPersonWhenCreateThenReturnPerson() {
         // given
         PersonModel person1 = PersonModel.builder().id(1L).birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
 
@@ -141,7 +141,7 @@ public class PeopleServiceImplTest {
 
     @Test
     // TODO - melhorar manipulacao de erro - quando invalido, excecao ou null lancar excecao
-    public void givenInvalidPersonWhenCreateThenThrowsConstraintViolationException() {
+    void givenInvalidPersonWhenCreateThenThrowsConstraintViolationException() {
         // given
         PersonModel person1 = PersonModel.builder().build();
 
@@ -155,7 +155,7 @@ public class PeopleServiceImplTest {
 
     @Test
     // TODO - melhorar manipulacao de erro - quando invalido, excecao ou null lancar excecao
-    public void givenInvalidHomeworldInPersonWhenCreateThenThrowsIllegalArgumentException() {
+    void givenInvalidHomeworldInPersonWhenCreateThenThrowsIllegalArgumentException() {
         // given
         PersonModel person1 = PersonModel.builder().id(1L).birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
 
@@ -174,7 +174,7 @@ public class PeopleServiceImplTest {
      */
 
     @Test
-    public void givenPersonWhenDeleteByIdThenDelete() throws NotFoundException {
+    void givenPersonWhenDeleteByIdThenDelete() throws NotFoundException {
         // given
         PersonModel person1 = PersonModel.builder().id(1L).birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
 
@@ -189,7 +189,7 @@ public class PeopleServiceImplTest {
     }
 
     @Test()
-    public void givenNotFoundWhenDeleteByIdThenThrowsNotFoundException() {
+    void givenNotFoundWhenDeleteByIdThenThrowsNotFoundException() {
         // given
         // prepares mock
         Mockito.doThrow(EmptyResultDataAccessException.class).when(peopleRepository).deleteById(anyLong());
@@ -205,7 +205,7 @@ public class PeopleServiceImplTest {
      */
 
     @Test
-    public void givenPersonWhenModifyThenModify() throws NotFoundException {
+    void givenPersonWhenModifyThenModify() throws NotFoundException {
         // given
         PersonModel person1 = PersonModel.builder().id(1L).birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
 
@@ -222,7 +222,7 @@ public class PeopleServiceImplTest {
     }
 
     @Test()
-    public void givenInvalidPersonIdWhenModifyThenThrowsNotFoundException() {
+    void givenInvalidPersonIdWhenModifyThenThrowsNotFoundException() {
         // given
         // prepares mock
         Mockito.when(peopleRepository.findById(anyLong())).thenReturn(Optional.empty());
@@ -234,7 +234,7 @@ public class PeopleServiceImplTest {
     }
 
     @Test()
-    public void givenInvalidAttributesInPersonWhenModifyThenThrowsConstraintViolationException() {
+    void givenInvalidAttributesInPersonWhenModifyThenThrowsConstraintViolationException() {
         // given
         // prepares mock
         PersonModel person1 = PersonModel.builder().id(1L).build();
@@ -246,7 +246,7 @@ public class PeopleServiceImplTest {
     }
 
     @Test()
-    public void givenInvalidHomeworldInPersonWhenModifyThenThrowsIllegalArgumentException() {
+    void givenInvalidHomeworldInPersonWhenModifyThenThrowsIllegalArgumentException() {
         // given
         // prepares mock
         PersonModel person1 = PersonModel.builder().id(1L).birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
@@ -264,14 +264,14 @@ public class PeopleServiceImplTest {
     @TestConfiguration
     static class PeopleServiceTestContextConfiguration {
         @Bean
-        public PeopleService peopleService() {
+        PeopleService peopleService() {
             return new PeopleServiceImpl();
 
         }
 
 
         @Bean
-        public Validator validator() {
+        Validator validator() {
             return new LocalValidatorFactoryBean();
         }
     }

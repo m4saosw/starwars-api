@@ -28,7 +28,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
  * turning on SQL logging
  */
 @DataJpaTest
-public class PeopleRepositoryIntegrationTest {
+class PeopleRepositoryIntegrationTest {
     @Autowired
     private TestEntityManager entityManager;
 
@@ -37,11 +37,11 @@ public class PeopleRepositoryIntegrationTest {
 
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
     }
 
     @Test
-    public void givenPeopleWhenListThenReturnPeople() {
+    void givenPeopleWhenListThenReturnPeople() {
         // given
         peopleRepository.deleteAll();
 
@@ -65,7 +65,7 @@ public class PeopleRepositoryIntegrationTest {
 
 
     @Test
-    public void givenPersonWhenFindByIdThenReturnPerson() {
+    void givenPersonWhenFindByIdThenReturnPerson() {
         // given
         peopleRepository.deleteAll();
 
@@ -84,7 +84,7 @@ public class PeopleRepositoryIntegrationTest {
     }
 
     @Test
-    public void givenPersonWhenCreateThenSave() {
+    void givenPersonWhenCreateThenSave() {
         // given
         PersonModel person1 = PersonModel.builder().birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
 
@@ -97,7 +97,7 @@ public class PeopleRepositoryIntegrationTest {
     }
 
     @Test
-    public void givenInvalidPersonWhenCreateThenThrowsRuntimeException() {
+    void givenInvalidPersonWhenCreateThenThrowsRuntimeException() {
         // given
         PersonModel person1 = PersonModel.builder().build();
 
@@ -108,7 +108,7 @@ public class PeopleRepositoryIntegrationTest {
 
 
     @Test
-    public void givenPersonWhenDeleteByIdThenDelete() {
+    void givenPersonWhenDeleteByIdThenDelete() {
         // given
         peopleRepository.deleteAll();
 
@@ -130,7 +130,7 @@ public class PeopleRepositoryIntegrationTest {
 
 
     @Test
-    public void givenInvalidPersonWhenDeleteByIdThenThrowsEmptyResultDataAccessException() {
+    void givenInvalidPersonWhenDeleteByIdThenThrowsEmptyResultDataAccessException() {
         // given
 
         // when / then
@@ -142,7 +142,7 @@ public class PeopleRepositoryIntegrationTest {
 
 
     @Test
-    public void givenPersonWhenModifyByIdThenModify() {
+    void givenPersonWhenModifyByIdThenModify() {
         // given
         peopleRepository.deleteAll();
 

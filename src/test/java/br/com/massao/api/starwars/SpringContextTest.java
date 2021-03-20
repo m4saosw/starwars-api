@@ -10,9 +10,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 //@RunWith(SpringRunner.class)
 //@SpringBootTest
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class SpringContextTest {
+class SpringContextTest {
 
     @Test
-    public void whenSpringContextIsBootstrapped_thenNoExceptions() {
+    void whenSpringContextIsBootstrapped_thenNoExceptions() {
     }
 }

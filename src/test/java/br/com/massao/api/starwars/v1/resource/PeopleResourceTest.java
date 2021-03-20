@@ -37,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 //@ContextConfiguration(classes={StartWarsApiApplication.class, SecurityConfig.class, TokenService.class})
 @ContextConfiguration(classes={StartWarsApiApplication.class })
 @AutoConfigureMockMvc
-public class PeopleResourceTest {
+class PeopleResourceTest {
     @Autowired
     private MockMvc mvc;
 
@@ -57,7 +57,7 @@ public class PeopleResourceTest {
     }
 
 //    @BeforeEach
-//    public void setUp() {
+//    void setUp() {
 //        mvc = MockMvcBuilders
 //                .webAppContextSetup(context)
 //                .apply(springSecurity(springSecurityFilterChain))
@@ -72,7 +72,7 @@ public class PeopleResourceTest {
     @Test
     //@DisplayName("Test list not found returning 200")
     //@WithMockUser(value = "userAdmin1", password = "123456", authorities = "ADMIN")
-    public void givenPeopleNotFoundWhenGetPeopleThenReturnStatus200() throws Exception {
+    void givenPeopleNotFoundWhenGetPeopleThenReturnStatus200() throws Exception {
         // given
         List<PersonModel> peopleModel = Arrays.asList();
         Page<PersonModel> peoplePageModel = new PageImpl<>(peopleModel);
@@ -90,7 +90,7 @@ public class PeopleResourceTest {
     }
 
     @Test
-    public void givenPeopleWhenGetPeopleThenReturnPeopleWithStatus200() throws Exception {
+    void givenPeopleWhenGetPeopleThenReturnPeopleWithStatus200() throws Exception {
         // given
         PersonModel person1 = PersonModel.builder().id(1L).birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
         PersonModel person2 = PersonModel.builder().id(2L).birth_year("11111").gender("female").height(123).homeworld("terra").mass(100).name("PERSON2").build();
@@ -117,7 +117,7 @@ public class PeopleResourceTest {
      */
 
     @Test
-    public void givenNotFoundWhenFindByIdPersonThenReturnStatus404() throws Exception {
+    void givenNotFoundWhenFindByIdPersonThenReturnStatus404() throws Exception {
         // given
 
         // when
@@ -131,7 +131,7 @@ public class PeopleResourceTest {
     }
 
     @Test
-    public void givenPersonWhenFindByIdPersonThenReturnPersonWithStatus200() throws Exception {
+    void givenPersonWhenFindByIdPersonThenReturnPersonWithStatus200() throws Exception {
         // given
         PersonModel person1 = PersonModel.builder().id(1L).birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
 
@@ -153,7 +153,7 @@ public class PeopleResourceTest {
 
     @Test
     @WithMockUser(value = "user1", password = "123456", authorities = "ROLE_USER")
-    public void givenPersonWhenCreatePersonThenReturnLocationWithStatus201() throws Exception {
+    void givenPersonWhenCreatePersonThenReturnLocationWithStatus201() throws Exception {
         // given
         PersonModel person1 = PersonModel.builder().id(1L).birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
 
@@ -175,7 +175,7 @@ public class PeopleResourceTest {
 
     @Test
     @WithMockUser(value = "user1", password = "123456", authorities = "ROLE_USER")
-    public void givenInvalidPersonWhenCreatePersonThenReturnStatus400() throws Exception {
+    void givenInvalidPersonWhenCreatePersonThenReturnStatus400() throws Exception {
         // given
         PersonModel person1 = PersonModel.builder().build();
 
@@ -199,7 +199,7 @@ public class PeopleResourceTest {
 
     @Test
     @WithMockUser(value = "userAdmin1", password = "123456", authorities = "ROLE_ADMIN")
-    public void givenNotFoundWhenDeleteByIdPersonThenReturnStatus404() throws Exception {
+    void givenNotFoundWhenDeleteByIdPersonThenReturnStatus404() throws Exception {
         // given
 
         // when
@@ -214,7 +214,7 @@ public class PeopleResourceTest {
 
     @Test
     @WithMockUser(value = "userAdmin1", password = "123456", authorities = "ROLE_ADMIN")
-    public void givenPersonWhenDeleteByIdPersonThenDeleteAndReturnStatus204() throws Exception {
+    void givenPersonWhenDeleteByIdPersonThenDeleteAndReturnStatus204() throws Exception {
         // given
         PersonModel person1 = PersonModel.builder().id(1L).birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
 
@@ -235,7 +235,7 @@ public class PeopleResourceTest {
 
     @Test
     @WithMockUser(value = "user1", password = "123456", authorities = "ROLE_USER")
-    public void givenNotFoundWhenUpdatePersonThenReturnStatus404() throws Exception {
+    void givenNotFoundWhenUpdatePersonThenReturnStatus404() throws Exception {
         // given
         PersonModel person1 = PersonModel.builder().id(1L).birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
 
@@ -253,7 +253,7 @@ public class PeopleResourceTest {
 
     @Test
     @WithMockUser(value = "user1", password = "123456", authorities = "ROLE_USER")
-    public void givenPersonWhenUpdateThenReturnPersonWithStatus200() throws Exception {
+    void givenPersonWhenUpdateThenReturnPersonWithStatus200() throws Exception {
         // given
         PersonModel person1 = PersonModel.builder().id(1L).birth_year("XFDFD").gender("male").height(123).homeworld("terra").mass(50).name("person1").build();
         PersonModel person2 = PersonModel.builder().birth_year("11111").gender("female").height(123).homeworld("terra").mass(100).name("PERSON2").build();
