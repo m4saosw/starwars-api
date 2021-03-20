@@ -35,25 +35,13 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
 
-      - name: Build package (preparing to deploy on Heroku)
-        run: mvn -B package --file pom.xml
-
-      - name: Create build path staging (preparing to deploy on Heroku)
-        run: mkdir staging && cp target/*.jar staging
-
-      - name: Upload artifact result for job (preparing to deploy on Heroku)
-        uses: actions/upload-artifact@v1
+      - name: Deploy to Heroku
+        # You may pin to the exact commit or the version.
+        uses: AkhileshNS/heroku-deploy@v3.12.12
         with:
-          name: starwars-api
-          path: staging
-
-      - name: Login to Heroku Container registry (preparing to deploy on Heroku)
-        env: 
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: heroku container:login
-
-      - name: Build and push (deploy on Heroku)
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-          HEROKU_APP_NAME: people-starwars-api
-        run: heroku plugins:install java && heroku create --no-remote && heroku deploy:jar staging/starwars-api-0.0.1-SNAPSHOT.jar --app people-starwars-api
+          # This will be used for authentication. You can find it in your heroku homepage account settings
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          # Email that you use with heroku
+          heroku_email: moledgama-github1@yahoo.com
+          # The appname to use for deploying/updating
+          heroku_app_name: teste-starwars-api
