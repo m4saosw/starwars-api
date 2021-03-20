@@ -59,16 +59,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         //@formatter:off
+        final String ROLE_ADMIN = "ADMIN";
+        final String ROLE_USER = "USER";
+
         http.authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/").permitAll()
                 .antMatchers(HttpMethod.GET, "/**").permitAll()
 
-                .antMatchers(HttpMethod.POST, "/v1/people").hasAnyRole("USER", "ADMIN")
-                .antMatchers(HttpMethod.POST, "/v1/people/create-many").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/v1/people").hasAnyRole(ROLE_USER, ROLE_ADMIN)
+                .antMatchers(HttpMethod.POST, "/v1/people/create-many").hasRole(ROLE_ADMIN)
 
-                .antMatchers(HttpMethod.PUT, "/v1/people/**").hasAnyRole("USER", "ADMIN")
+                .antMatchers(HttpMethod.PUT, "/v1/people/**").hasAnyRole(ROLE_USER, ROLE_ADMIN)
 
-                .antMatchers(HttpMethod.DELETE, "/v1/people/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/v1/people/**").hasRole(ROLE_ADMIN)
 
                 .antMatchers(HttpMethod.POST, "/auth").permitAll()
 
