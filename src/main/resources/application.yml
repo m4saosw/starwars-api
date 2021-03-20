@@ -1,6 +1,7 @@
 server:
   servlet:
     context-path: /starwars-api
+  port: ${PORT:8080}
 
 swapi:
   url: https://swapi.dev/api
