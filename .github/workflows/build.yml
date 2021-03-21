@@ -44,4 +44,4 @@ jobs:
           # Email that you use with heroku
           heroku_email: moledgama-github1@yahoo.com
           # The appname to use for deploying/updating
-          heroku_app_name: teste-starwars-api
+          heroku_app_name: people-starwars-api
