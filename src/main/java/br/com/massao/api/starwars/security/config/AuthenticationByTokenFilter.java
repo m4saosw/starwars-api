@@ -11,6 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 public class AuthenticationByTokenFilter extends OncePerRequestFilter {
 	
@@ -36,8 +37,10 @@ public class AuthenticationByTokenFilter extends OncePerRequestFilter {
 
 	private void authenticateClient(String token) {
 		Long idUser = tokenService.getIdUser(token);
-		UserModel userModel = repository.findById(idUser).get();
-		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userModel, null, userModel.getAuthorities());
+		Optional<UserModel> userModel = repository.findById(idUser);
+		if (! userModel.isPresent()) return;
+
+		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userModel.get(), null, userModel.get().getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
 
