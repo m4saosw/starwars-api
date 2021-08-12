@@ -31,7 +31,9 @@ import java.util.Optional;
 public class PeopleResource {
     @Autowired
     private PeopleService peopleService;
-    private PersonModelConverter converter = new PersonModelConverter();
+
+    @Autowired
+    private PersonModelConverter converter;
 
 
     /**
@@ -65,15 +67,13 @@ public class PeopleResource {
     public ResponseEntity<Person> findById(@PathVariable("id") Long id) {
         log.info("findById id={}", id);
 
-        Optional<PersonModel> person;
         try {
-            person = peopleService.findById(id);
+            PersonModel model = peopleService.findById(id).get();
+            return new ResponseEntity<>(new Person(model), HttpStatus.OK);
         } catch (NotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
         // nota: ResponseEntity usando retorno tradicional
-        return new ResponseEntity<>(new Person(person.get()), HttpStatus.OK);
     }
 
     /**

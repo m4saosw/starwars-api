@@ -4,12 +4,14 @@ package br.com.massao.api.starwars.converter;
 import br.com.massao.api.starwars.dto.InputPerson;
 import br.com.massao.api.starwars.model.PersonModel;
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor
+@Component
 public class PersonModelConverter {
 
     public PersonModel modelFrom(InputPerson person) {
