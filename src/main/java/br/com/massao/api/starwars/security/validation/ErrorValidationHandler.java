@@ -1,5 +1,6 @@
 package br.com.massao.api.starwars.security.validation;
 
+import br.com.massao.api.starwars.security.resource.AuthenticationResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.ArrayList;
 import java.util.List;
 
-@RestControllerAdvice
+@RestControllerAdvice(basePackageClasses = AuthenticationResource.class)
 public class ErrorValidationHandler {
 	
 	@Autowired
